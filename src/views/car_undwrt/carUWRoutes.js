@@ -1,21 +1,9 @@
-import HelloFromVux from './componrnts/HelloFromVux.vue'
+import carUWIndex from './componrnts/carUWIndex.vue'
 
 let routes = [
     {
-        path: '/',
-        component: HelloFromVux,
-        name: '',
-        hidden: true
-    },
-    {
-        path: '*',
-        component: HelloFromVux,
-        name: '',
-        hidden: true
-    },
-    {
-        path: '/login',
-        component: HelloFromVux,
+        path: '/carUWIndex',
+        component: carUWIndex,
         name: '',
         hidden: true
     },
