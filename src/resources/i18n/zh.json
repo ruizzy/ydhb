@@ -1,0 +1,25 @@
+{
+  "sys_title": "太平海外",	
+  "btn_create": "新增",
+  "btn_view": "查看",
+  "btn_update": "更新",
+  "btn_delete": "删除",
+  "btn_search": "搜索",
+  "btn_save": "保存",
+  "btn_return": "返回",
+  "btn_edit": "编辑",
+
+  "title_basics": "基础数据",
+  "title_data_table": "数据表格",
+  "title_test": "测试过滤器",
+  "title_operation": "操作",
+
+  "robot_com_code": "编码",
+  "robot_recharge_count": "补给次数",
+  "robot_robot_height": "机器人高度",
+  "robot_robot_sn": "机器人Sn",
+  "robot_manufacture_name": "制造商名称",
+  "robot_manufacture_date": "制造日期",
+  "robot_nick_name": "昵称",
+  "robot_valid_status": "状态"
+}
