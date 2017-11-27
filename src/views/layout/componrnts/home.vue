@@ -33,7 +33,7 @@ export default {
         img: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1511715408022&di=9f4d24ec732b07bfc4eef8a6426f973e&imgtype=0&src=http%3A%2F%2Fimage.uczzd.cn%2F14730325282790028282.jpeg%3Fid%3D0%26from%3De%253Cahref%3D',
         url: 'reportFrom'
       }],
-      
+
 
     }
   },
@@ -82,4 +82,6 @@ export default {
   display: inline-block;
   margin-top: 5px;
 }
+
+
 </style>

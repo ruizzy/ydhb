@@ -57,7 +57,7 @@ import {
 from 'vux'
 export default {
 name: 'app',
-	data() {   
+	data() {
 		return {
 		  isI: false,
 		  showBar: true,
@@ -145,4 +145,11 @@ name: 'app',
 body {
   background-color: #fbf9fe;
 }
+
+#jq-header{
+  background-color: #c20000;
+}
+  #jq-header h1 {
+    color: white;
+  }
 </style>
