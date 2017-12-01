@@ -1,4 +1,4 @@
-import Mock from 'mockjs';
+import Mock from 'mockjs'
 const LoginUsers = [
   {
     id: 1,
@@ -9,7 +9,7 @@ const LoginUsers = [
   }
 ];
 
-const Users = [];
+const Users = []
 
 for (let i = 0; i < 86; i++) {
   Users.push(Mock.mock({

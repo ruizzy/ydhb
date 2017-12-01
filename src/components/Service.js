@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { refreshTime } from '../../config/config'
+import { refreshTime } from '../config/config'
 const layoutService = {
     refreshTime: null
 };

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import axios from 'axios'
 import qs from 'qs'
-import store from '../vuex/store'
+import store from '../store/store'
 import NProgress from 'nprogress'
 import {context, authName, authValue, timeout} from './config'
 const commit = store.commit || store.dispatch;
@@ -49,10 +49,10 @@ axios.interceptors.request.use((config) => {
             return data
         }]
     }
-    
+
     return config;
 }, (error) => {
-    
+
     return Promise.reject(error);
 })
 
