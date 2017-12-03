@@ -1,18 +1,18 @@
 <template>
   <div id="app">
-    <x-header class="navigation-header"
-              :left-options="{backText: '', showBack: false}">
+    <x-header class="navigation-header" :left-options="{backText: '', showBack: false}">
+              <span v-show="!!title">{{ title }}</span>
     </x-header>
     <transition :name="'vux-pop-' + (direction === 'forward' ? 'in' : 'out')">
       <router-view></router-view>
     </transition>
     <transition name="fade">
       <tabbar v-show="barOPT.show">
-        <tabbar-item :link="/home" selected>
+        <tabbar-item link="/home" selected>
           <img slot="icon" src=""/>
           <span slot="label">首页</span>
         </tabbar-item>
-        <tabbar-item :link="/user">
+        <tabbar-item link="/user">
           <img slot="icon" src=""/>
           <span slot="label">个人</span>
         </tabbar-item>

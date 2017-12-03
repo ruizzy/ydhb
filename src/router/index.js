@@ -12,6 +12,10 @@ const routes = [
   {
     path: '/user',
     component: User
+  },
+  {
+    path: '*',
+    component: Home
   }
 ]
 
