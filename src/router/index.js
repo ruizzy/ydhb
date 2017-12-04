@@ -3,6 +3,8 @@ import VueRouter from 'vue-router'
 import Home from '../components/Home'
 import User from '../components/User'
 import CarUWHome from '../components/carUWComponents/carUWHome'
+import mocktest from '../components/test/mocktest'
+import item from '../components/test/item'
 
 Vue.use(VueRouter)
 const routes = [
@@ -25,6 +27,14 @@ const routes = [
   {
     path: '/',
     component: Home
+  },
+  {
+    path: '/mocktest',//测试用zgr
+    component: mocktest
+  },
+  {
+    path: '/item',//测试用zgr
+    component: item
   }
 ]
 

@@ -36,7 +36,7 @@
             id: 102,
             label: '非车核保',
             icon: '',
-            link: ''
+            link: '/mocktest'
           },
           {
             id: 103,
