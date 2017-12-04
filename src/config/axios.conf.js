@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import axios from 'axios'
 import qs from 'qs'
-import store from '../store/store'
+import store from '../store/Store'
 import NProgress from 'nprogress'
 import {context, authName, authValue, timeout} from './config'
 const commit = store.commit || store.dispatch;

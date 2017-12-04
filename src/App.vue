@@ -1,18 +1,20 @@
 <template>
   <div id="app">
-    <x-header class="navigation-header" :left-options="{backText: '', showBack: false}">
-              <span v-show="!!title">{{ title }}</span>
+    <x-header class="navigation-header"
+              :left-options="{backText: '', showBack: showBack}"
+              v-show="showNavigationBar">
+              <span v-show="title.length">{{ title }}</span>
     </x-header>
     <transition :name="'vux-pop-' + (direction === 'forward' ? 'in' : 'out')">
       <router-view></router-view>
     </transition>
     <transition name="fade">
       <tabbar v-show="barOPT.show">
-        <tabbar-item link="/home" selected>
+        <tabbar-item :link="'/home'" selected @on-item-click="selectHome">
           <img slot="icon" src=""/>
           <span slot="label">首页</span>
         </tabbar-item>
-        <tabbar-item link="/user">
+        <tabbar-item :link="'/user'" @on-item-click="selectUser">
           <img slot="icon" src=""/>
           <span slot="label">个人</span>
         </tabbar-item>
@@ -33,7 +35,7 @@
         {{prompt.msg}}
       </div>
       <div class="popue-footer">
-        <button class="defaul_btn" @click="closePromp">确定</button>
+        <button class="defaul_btn">确定</button>
         <button v-show="prompt.cancel" class="defaul_btn" @click="prompt.show=false">取消</button>
       </div>
     </x-dialog>
@@ -47,26 +49,33 @@
     Toast,
     Tabbar,
     TabbarItem,
-    Tab,
-    TabItem,
     XDialog
   } from 'vux'
 
   export default {
     name: 'app',
+
+    components: {
+      XHeader,
+      Loading,
+      Toast,
+      Tabbar,
+      TabbarItem,
+      XDialog
+    },
+
     data () {
       return {
-        showBar: true,
-        barSelected: '0',
       }
     },
+
     created () {
-        // 手机系统类型判断
+        // 手机类型判断
       const _ua = window.navigator.userAgent
-      if (_ua.match(/iPhone|iPod|iPad/i) != null) {
-        this.$store.commit('UPDATE_EQ', 'i')
+      if (_ua.match(/iPhone|iPad/i) != null) {
+        this.$store.commit('UPDATE_EQ', {eq: 'ios'})
       } else if (_ua.match(/Android/i) != null) {
-        this.$store.commit('UPDATE_EQ', 'a')
+        this.$store.commit('UPDATE_EQ', {eq: 'android'})
       }
 
       // 清除首页 载入中 loading
@@ -75,33 +84,38 @@
         _weui.remove()
       }
     },
+
     methods: {
-      onClickBack () {
-        if (this.$store.state.isBack) {
-          let backPage = this.$store.state.backPage
-          if (!backPage) {
-            window.history.back()
-          } else {
-            this.$router.push(backPage)
-            this.$store.commit('UPDATE_BACKPAGE', '')
-          }
-        } else {
-          // 登出系统
-          // user.logoutFromDevice()
-        }
+      selectHome () {
+        this.$store.commit('UPDATE_SHOW_BACK', {
+          showBack: false
+        })
+        this.$store.commit('UPDATE_SHOW_NAVIGATIONBAR', {
+          showNavigationBar: true
+        })
       },
-      closePromp () {
-        this.prompt.show = false
-        let callback = this.$store.state.prompt.callback;
-        !!callback && callback()
+      selectUser () {
+        this.$store.commit('UPDATE_SHOW_BACK', {
+          showBack: false
+        })
+        this.$store.commit('UPDATE_SHOW_NAVIGATIONBAR', {
+          showNavigationBar: false
+        })
       }
     },
+
     computed: {
       direction () {
         return this.$store.state.direction
       },
+      showBack () {
+        return this.$store.state.showBack
+      },
+      showNavigationBar () {
+        return this.$store.state.showNavigationBar
+      },
       title () {
-        return this.$store.state.title
+        return this.$store.state.navigationTitle
       },
       showLoading () {
         return this.$store.state.showLoading
@@ -118,16 +132,6 @@
       prompt () {
         return this.$store.state.prompt
       }
-    },
-    components: {
-      XHeader,
-      Loading,
-      Toast,
-      Tabbar,
-      TabbarItem,
-      Tab,
-      TabItem,
-      XDialog
     }
 }
 </script>

@@ -5,24 +5,25 @@ import VuexI18n from 'vuex-i18n'
 Vue.use(Vuex)
 
 /**
- * @Param direction 控制转场方向
+ * @Param direction 转场方向
  * @Param title 页面标题
- * @Param showLoading 请求遮罩层
+ * @Param showLoading 遮罩层
  * @Param isBack 控制是否跳出应用
  * @Param appType 应用环境 [pro, dev]
- * @Param eq 硬件平台 [a, i]
- * @Param timeout ??
+ * @Param eq 硬件平台 [ios, android]
+ * @Param timeout 超时时间
  * @Param toastOPT 弹出框配置
  * @Param barOPT tabbar配置
  * @Param backPage 返回页面
  */
 const state = {
   direction: 'forward',
-  title: '',
+  navigationTitle: '',
+  showBack: false,
+  showNavigationBar: true,
   showLoading: false,
-  isBack: true,
   appType: 'dev',
-  eq: 'a',
+  eq: 'ios',
   periodPay: '11',
   timeout: 1200000,
   toastOPT: {
@@ -46,7 +47,6 @@ const state = {
   scrollY: 0
 }
 
-// 定义所需的 mutations
 const mutations = {
   UPDATE_SCROLLY (state, xx) {
     state.scrollY = xx
@@ -54,8 +54,14 @@ const mutations = {
   UPDATE_DIRECTION (state, direction) {
     state.direction = direction
   },
-  UPDATE_TITLE (state, title) {
-    state.title = title
+  UPDATE_NAVIGATION_TITLE (state, obj) {
+    state.title = obj.title
+  },
+  UPDATE_SHOW_BACK (state, obj) {
+    state.showBack = obj.showBack
+  },
+  UPDATE_SHOW_NAVIGATIONBAR (state, obj) {
+    state.showNavigationBar = obj.showNavigationBar
   },
   LOADING (state, ifShow) {
     state.showLoading = ifShow
@@ -68,11 +74,9 @@ const mutations = {
       msg: toastOPT.msg || ''
     }
   },
-  UPDATE_IS_BACK (state, obj) {
-    state.isBack = obj
-  },
-  UPDATE_EQ(state, obj) {
-    state.eq = obj
+
+  UPDATE_EQ (state, obj) {
+    state.eq = obj.eq
   },
   UPDATE_BAROPT (state, obj) {
     state.barOPT = {
@@ -83,7 +87,7 @@ const mutations = {
   UPDATE_TABINDEX (state, tabIndex) {
     state.tabIndex = tabIndex
   },
-  UPDATE_PROMPT(state, prompt) {
+  UPDATE_PROMPT (state, prompt) {
     state.prompt = {
       show: prompt.show == undefined ? true : prompt.show,
       msg: prompt.msg,
@@ -91,10 +95,10 @@ const mutations = {
       cancel: !!prompt.cancel
     }
   },
-  UPDATE_BACKPAGE(state, backPage) {
+  UPDATE_BACKPAGE (state, backPage) {
     state.backPage = backPage
   },
-  UPDATE_PERIODPAY(state,value){
+  UPDATE_PERIODPAY (state, value) {
     state.periodPay = value
   }
 }

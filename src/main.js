@@ -3,7 +3,7 @@ import FastClick from 'fastclick'
 import App from './App'
 import router from './router/index'
 import {translationsZh, translationsEn} from './resources/i18n'
-import store from './store/store'
+import store from './store/Store'
 import './config'
 
 require('./assets/sass/app.scss')
@@ -18,5 +18,6 @@ Vue.i18n.set('zh')
 new Vue({
   router,
   store,
-  render: h => h(App)
+  template: '<App/>',
+  components: { App }
 }).$mount('#app-box')
