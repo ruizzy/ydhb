@@ -8,9 +8,8 @@
  */
 
 import Vue from 'vue'
-import ext from '../libs/com/extend.min'
 
-let item = {}
+const item = {}
 
 item.temp = {
     proposalNo:'',
@@ -20,9 +19,7 @@ item.temp = {
 /**
  * @Param obj 标的
  */
-item.initItem = (obj) => {
-  if (!!obj) {
-    ext.extend(item.temp, obj)
-  } 
-}
+item.initItem = obj => {
+  Object.assign(item.temp, obj);
+};
 export default item

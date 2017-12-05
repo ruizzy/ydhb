@@ -1,12 +1,13 @@
 <template>
+    <div>
+        {{item}}
+    </div>
 </template>
 
 <script>
 import { item } from 'business'
-import Service from '../Service'
 export default {
     created() {
-        item.initItem(Service.getItem());
     },
     methods: {
     },
