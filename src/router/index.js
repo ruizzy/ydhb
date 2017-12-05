@@ -2,7 +2,9 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../components/Home'
 import User from '../components/User'
-import CarUWHome from '../components/carUWComponents/carUWHome'
+import CarUWHome from '../components/carUWComponents/CarUWHome'
+import CarUWCheckTask from '../components/carUWComponents/CarUWCheckTask'
+import CarUWProcessTask from '../components/carUWComponents/CarUWProcessTask'
 import mocktest from '../components/test/mocktest'
 import item from '../components/test/item'
 
@@ -17,6 +19,14 @@ const routes = [
     component: CarUWHome
   },
   {
+    path: '/carUWCheckTask',
+    component: CarUWCheckTask
+  },
+  {
+    path: '/carUWProcessTask',
+    component: CarUWProcessTask
+  },
+  {
     path: '/user',
     component: User
   },
@@ -29,11 +39,11 @@ const routes = [
     component: Home
   },
   {
-    path: '/mocktest',//测试用zgr
+    path: '/mocktest', // 测试用zgr
     component: mocktest
   },
   {
-    path: '/item',//测试用zgr
+    path: '/item', // 测试用zgr
     component: item
   }
 ]

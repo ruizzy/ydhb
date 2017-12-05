@@ -1,12 +1,12 @@
 <template>
-  <div>
-    <group class="car-uw-menu" :gutter="0">
-      <cell class="menu"
-            v-for="menu in menus"
+  <div id="car-uw-menu">
+    <group gutter="0">
+      <cell v-for="menu in menus"
             :key="menu.id"
             :title="menu.title"
+            :is-link="true"
             :link="menu.link"
-            :is-link="true">
+            @click.native="selectMenu(menu.title)">
       </cell>
     </group>
   </div>
@@ -28,26 +28,37 @@
             id: 201,
             title: '任务查看',
             icon: '',
-            link: ''
+            link: '/carUWCheckTask'
           },
           {
             id: 202,
             title: '任务处理',
             icon: '',
-            link: ''
+            link: '/carUWProcessTask'
           }
         ]
       }
     },
     methods: {
-
+      selectMenu (title) {
+        this.$store.commit('UPDATE_NAVIGATION_TITLE', {
+          navigationTitle: title
+        })
+      }
     }
 }
 </script>
 
-<style scoped>
-  .car-uw-menu .menu {
-    height: 20px;
-    font: 14px Helvetica;
+<style scoped lang="less">
+  #car-uw-menu {
+
+    .weui-cell {
+      height: 25px;
+
+      .vux-label {
+        font-size: 14px;
+        color: #333333;
+      }
+    }
   }
 </style>

@@ -1,6 +1,6 @@
 <template>
-  <div id="home">
-    <grid class="home-menu" :cols="3">
+  <div id="home-menu">
+    <grid :cols="3">
       <grid-item class="menu" v-for="menu in menus"
                  :key="menu.id"
                  :label="menu.label"
@@ -53,7 +53,18 @@
         ]
       }
     },
+    mounted () {
+      const width = window.innerWidth ||
+        document.documentElement.clientWidth ||
+        document.body.clientWidth
+      console.log(width)
 
+      Array.prototype.forEach.call(
+        document.getElementById('home-menu').getElementsByClassName('weui-grid'),
+        function (grid) {
+          grid.style.width = ((width - 40) / 3).toString() + 'px'
+        })
+    },
     methods: {
       selectMenu (title) {
         this.$store.commit('UPDATE_SHOW_BACK', {
@@ -68,12 +79,17 @@
 }
 </script>
 
-<style scoped>
-  .home-menu {
-    margin: 10px;
-  }
+<style scoped lang="less">
+  #home-menu {
 
-  .home-menu .menu {
+    .weui-grids {
+      border: none;
+      margin: 5px;
 
+      .weui-grid {
+        border: none;
+        margin: 5px;
+      }
+    }
   }
 </style>
