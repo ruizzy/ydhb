@@ -55,7 +55,7 @@ const mutations = {
     state.direction = direction
   },
   UPDATE_NAVIGATION_TITLE (state, obj) {
-    state.title = obj.title
+    state.navigationTitle = obj.navigationTitle
   },
   UPDATE_SHOW_BACK (state, obj) {
     state.showBack = obj.showBack

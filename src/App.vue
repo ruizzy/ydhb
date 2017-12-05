@@ -137,9 +137,28 @@
 </script>
 
 <style lang="less">
-@import '~vux/src/styles/reset.less';
+  @import '~vux/src/styles/reset.less';
 
-#app .navigation-header {
-  background-color: #c20000;
-}
+  #app .navigation-header {
+    background-color: #c20000;
+
+    .vux-header-left {
+      top: 3px;
+      left: 3px;
+      width: 44px;
+      line-height: 44px;
+
+      .left-arrow {
+        top: 7px;
+        left: 7px;
+      }
+    }
+
+    .vux-header-title {
+      color: white;
+      font-size: 16px;
+      line-height: 44px;
+    }
+  }
+
 </style>

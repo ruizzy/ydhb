@@ -5,7 +5,7 @@
                  :key="menu.id"
                  :label="menu.label"
                  :link="menu.link"
-                 @on-item-click="selectMenu">
+                 @on-item-click="selectMenu(menu.label)">
         <img slot="icon" src="menu.icon"/>
       </grid-item>
     </grid>
@@ -55,9 +55,13 @@
     },
 
     methods: {
-      selectMenu () {
+      selectMenu (title) {
         this.$store.commit('UPDATE_SHOW_BACK', {
           showBack: true
+        })
+
+        this.$store.commit('UPDATE_NAVIGATION_TITLE', {
+          navigationTitle: title
         })
       }
     }
