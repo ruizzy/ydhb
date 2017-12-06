@@ -2,7 +2,7 @@
   <div id="car-uw-check-task">
     <group label-width="60px"
            label-align="left"
-           label-margin-right="15px"
+           label-margin-right='15px'
            gutter="0">
       <x-input title="投保单号" placeholder="请输入投保单号" v-model="policyNo"></x-input>
       <popup-picker title="险种" v-model="product"></popup-picker>
@@ -16,12 +16,12 @@
       <checker v-model="taskStatus" type="checkbox" default-item-class="task-default" selected-item-class="task-selected">
         <checker-item  v-for="status in taskStatuses"
                        :key="status.id"
-                       :value="status.value">
+                       :value="status">
           {{status.value}}
         </checker-item>
       </checker>
     </group>
-    <x-button text="查询" :link="'/'"></x-button>
+    <x-button text="查询" :link="'/carUWSearchResult/false'" @click.native="searchBtnClicked"></x-button>
   </div>
 </template>
 
@@ -58,26 +58,23 @@
         startLevel: '',
         endLevel: '',
         searchDate: '2017-12-05',
-        taskStatus: [{
-          id: '301',
-          value: '待处理'
-        }],
+        taskStatus: [],
         taskStatuses: [
           {
-            id: '301',
+            id: 301,
             value: '待处理'
           },
           {
-            id: '302',
-            value: '待处理'
+            id: 302,
+            value: '暂存'
           },
           {
-            id: '303',
-            value: '待处理'
+            id: 303,
+            value: '下发修改'
           },
           {
-            id: '304',
-            value: '待处理'
+            id: 304,
+            value: '处理完毕'
           }
         ]
       }
@@ -86,13 +83,18 @@
     create () {
     },
     methods: {
+      searchBtnClicked () {
+        this.$store.commit('UPDATE_NAVIGATION_TITLE', {
+          navigationTitle: '查询结果'
+        })
+      }
     }
   }
 </script>
 
-<style scoped lang="less">
+<style lang="less">
   #car-uw-check-task {
-    .vux-x-input {
+    .vux-x-input.weui-cell {
       font-size: 14px;
       height: 25px;
     }
@@ -100,28 +102,70 @@
     .vux-cell-box {
       font-size: 14px;
       height: 45px;
-      padding: 0;
     }
 
-    .vux-datetime {
-      height: 25px;
+    .vux-cell-box.weui-cell {
+      padding: 0;
+
+      .vux-x-input.weui-cell {
+
+        label.weui-label {
+          padding-right: 5px;
+        }
+      }
     }
+
+    .vux-datetime.weui-cell {
+      height: 25px;
+
+      p {
+        color: #333333;
+        font-size: 14px;
+      }
+    }
+
+    .weui-cells__title {
+      color: #333333;
+      font-size: 14px;
+      height: 45px;
+      line-height: 45px;
+      margin: 0;
+    }
+
+    .vux-checker-box {
+      height: 35px;
+      padding: 0 10px 10px 10px;
+
+      .vux-checker-item {
+        border-radius: 3px;
+        border: 1px solid;
+        height: 18px;
+        font-size: 14px;
+        line-height: 18px;
+        margin: 0 5px 5px 5px;
+        padding: 5px 10px;
+      }
+
+      .task-default {
+        border-color: #ececec;
+        color: #999999;
+      }
+      .task-selected {
+        border-color: #c20000;
+        color: #c20000;
+      }
+    }
+
+
 
     .weui-btn {
       color: white;
       background-color: #c20000;
+      font-size: 16px;
       height: 45px;
       width: 80%;
       position: relative;
       top: 20px;
-    }
-
-    .task-default {
-      border: 1px solid #ececec;
-      padding: 5px 15px;
-    }
-    .task-selected {
-      border: 1px solid green;
     }
   }
 </style>

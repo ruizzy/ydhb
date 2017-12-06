@@ -6,7 +6,7 @@
                  :label="menu.label"
                  :link="menu.link"
                  @on-item-click="selectMenu(menu.label)">
-        <img slot="icon" src="menu.icon"/>
+        <img slot="icon" :src="menu.icon"/>
       </grid-item>
     </grid>
   </div>
@@ -29,25 +29,25 @@
           {
             id: 101,
             label: '车险核保',
-            icon: 'success',
+            icon: require('../assets/img/carUW.png'),
             link: '/carUWHome'
           },
           {
             id: 102,
             label: '非车核保',
-            icon: '',
+            icon: require('../assets/img/nonCarUW.png'),
             link: '/mocktest'
           },
           {
             id: 103,
             label: '报表中心',
-            icon: '',
+            icon: require('../assets/img/formCenter.png'),
             link: ''
           },
           {
             id: 104,
             label: '催办事项',
-            icon: '',
+            icon: require('../assets/img/emergency.png'),
             link: ''
           }
         ]
@@ -64,6 +64,14 @@
         function (grid) {
           grid.style.width = ((width - 40) / 3).toString() + 'px'
         })
+
+      this.$store.commit('UPDATE_SHOW_BACK', {
+        showBack: false
+      })
+
+      this.$store.commit('UPDATE_NAVIGATION_TITLE', {
+        navigationTitle: ''
+      })
     },
     methods: {
       selectMenu (title) {
@@ -79,7 +87,7 @@
 }
 </script>
 
-<style scoped lang="less">
+<style lang="less">
   #home-menu {
 
     .weui-grids {
@@ -89,6 +97,17 @@
       .weui-grid {
         border: none;
         margin: 5px;
+        padding: 5px;
+
+        .weui-grid__icon {
+          height: 50px;
+          width: 50px;
+        }
+
+        .weui-grid__label {
+          color: #333333;
+          font-size: 14px;
+        }
       }
     }
   }

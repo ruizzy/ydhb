@@ -6,8 +6,6 @@ import {translationsZh, translationsEn} from './resources/i18n'
 import store from './store/Store'
 import './config'
 
-require('./assets/sass/app.scss')
-
 FastClick.attach(document.body)
 
 Vue.config.productionTip = false

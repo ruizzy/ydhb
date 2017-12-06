@@ -11,11 +11,13 @@
     <transition name="fade">
       <tabbar v-show="barOPT.show">
         <tabbar-item :link="'/home'" selected @on-item-click="selectHome">
-          <img slot="icon" src=""/>
+          <img slot="icon" src= "./assets/img/home-default.png"/>
+          <img slot="icon-active" src= "./assets/img/home-selected.png"/>
           <span slot="label">首页</span>
         </tabbar-item>
         <tabbar-item :link="'/user'" @on-item-click="selectUser">
-          <img slot="icon" src=""/>
+          <img slot="icon" src="./assets/img/account-default.png"/>
+          <img slot="icon-active" src="./assets/img/account-selected.png"/>
           <span slot="label">个人</span>
         </tabbar-item>
       </tabbar>
@@ -140,7 +142,8 @@
   @import '~vux/src/styles/reset.less';
 
   #app {
-    .navigation-header {
+    .vux-header.navigation-header {
+      height: 64px;
       background-color: #c20000;
 
       .vux-header-left {
@@ -150,8 +153,8 @@
         line-height: 44px;
 
         .left-arrow {
-          top: 7px;
-          left: 7px;
+          top: 27px;
+          left: 10px;
         }
       }
 
@@ -159,6 +162,8 @@
         color: white;
         font-size: 16px;
         line-height: 44px;
+        position: relative;
+        top: 20px;
       }
     }
   }

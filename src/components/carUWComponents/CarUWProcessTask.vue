@@ -17,7 +17,7 @@
       </cell-box>
       <datetime title="查询时间" v-model="searchDate"></datetime>
     </group>
-    <x-button text="查询" :link="'/'"></x-button>
+    <x-button text="查询" :link="'/carUWSearchResult/true'" @click.native="searchBtnClicked"></x-button>
   </div>
 </template>
 
@@ -60,7 +60,11 @@
 
     },
     methods: {
-
+      searchBtnClicked () {
+        this.$store.commit('UPDATE_NAVIGATION_TITLE', {
+          navigationTitle: '查询结果'
+        })
+      }
     },
     compute: {
 
@@ -68,10 +72,10 @@
   }
 </script>
 
-<style scoped lang="less">
+<style lang="less">
   #car-uw-process-task {
 
-    .vux-x-input {
+    .vux-x-input.weui-cell {
       font-size: 14px;
       height: 25px;
     }
@@ -79,16 +83,32 @@
     .vux-cell-box {
       font-size: 14px;
       height: 45px;
-      padding: 0;
     }
 
-    .vux-datetime {
+    .vux-cell-box.weui-cell {
+      padding: 0;
+
+      .vux-x-input.weui-cell {
+
+        label.weui-label {
+          padding-right: 5px;
+        }
+      }
+    }
+
+    .vux-datetime.weui-cell {
       height: 25px;
+
+      p {
+        color: #333333;
+        font-size: 14px;
+      }
     }
 
     .weui-btn {
       color: white;
       background-color: #c20000;
+      font-size: 16px;
       height: 45px;
       width: 80%;
       position: relative;

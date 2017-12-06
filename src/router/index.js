@@ -5,6 +5,7 @@ import User from '../components/User'
 import CarUWHome from '../components/carUWComponents/CarUWHome'
 import CarUWCheckTask from '../components/carUWComponents/CarUWCheckTask'
 import CarUWProcessTask from '../components/carUWComponents/CarUWProcessTask'
+import CarUWSearchResult from '../components/carUWComponents/CarUWSearchResult'
 import mocktest from '../components/test/mocktest'
 import item from '../components/test/item'
 
@@ -25,6 +26,10 @@ const routes = [
   {
     path: '/carUWProcessTask',
     component: CarUWProcessTask
+  },
+  {
+    path: '/carUWSearchResult/:isProcess',
+    component: CarUWSearchResult
   },
   {
     path: '/user',

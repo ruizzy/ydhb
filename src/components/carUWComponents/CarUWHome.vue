@@ -49,7 +49,7 @@
 }
 </script>
 
-<style scoped lang="less">
+<style lang="less">
   #car-uw-menu {
 
     .weui-cell {
