@@ -1,5 +1,4 @@
 {
-  "sys_title": "taipinghaiwai",
   "btn_create": "create",
   "btn_view": "view",
   "btn_update": "update",
@@ -9,17 +8,5 @@
   "btn_return": "return",
   "btn_edit": "edit",
 
-  "title_basics": "basicsData",
-  "title_data_table": "tableData",
-  "title_test": "testFilter",
-  "title_operation": "operation",
-
-  "robot_com_code": "comCode",
-  "robot_recharge_count": "rechargeCount",
-  "robot_robot_height": "robotHeight",
-  "robot_robot_sn": "robotSn",
-  "robot_manufacture_name": "manufactureName",
-  "robot_manufacture_date": "manufactureDate",
-  "robot_nick_name": "nickname",
-  "robot_valid_status": "validStatus"
+  "undwrt_proposal": "proposalNo"
 }

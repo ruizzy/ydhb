@@ -1,6 +1,6 @@
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
-import {item} from './data/carUwData'
+import {undwrtTaskQuery,undwrtTaskHandle} from './data/CarUwData'
 
 export default {
   /**
@@ -18,21 +18,21 @@ export default {
     mock.onGet('/error').reply(500, {
       msg: 'failure'
     });
-    //获取item信息
-    mock.onGet('/PC_EMOBILEMNG/car/getItem').reply(config => {
-      console.log(item)
+
+    //核保任务查询
+    mock.onPost('/PC_EMOBILEMNG/car/undwrtTaskQuery').reply(config => {
       return new Promise((resolve, reject) => {
         setTimeout(() => {
-            resolve([200, item]);
+            resolve([200, undwrtTaskQuery]);
         }, 1000);
       });
     });
 
-    //获取item信息
-    mock.onPost('/PC_EMOBILEMNG/car/getItem').reply(config => {
+    //核保任务处理
+    mock.onPost('/PC_EMOBILEMNG/car/undwrtTaskHandle').reply(config => {
       return new Promise((resolve, reject) => {
         setTimeout(() => {
-            resolve([200, item]);
+            resolve([200, undwrtTaskHandle]);
         }, 1000);
       });
     });

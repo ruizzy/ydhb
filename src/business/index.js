@@ -1,7 +1,5 @@
-import item from "./item"
-import itemkind from "./itemkind"
+import taskQuery from "./taskQuery"
 
 export {
-  item,
-  itemkind
+  taskQuery
 }

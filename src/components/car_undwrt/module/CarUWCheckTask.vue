@@ -4,16 +4,16 @@
            label-align="left"
            label-margin-right='15px'
            gutter="0">
-      <x-input title="投保单号" placeholder="请输入投保单号" v-model="policyNo"></x-input>
-      <popup-picker title="险种" v-model="product"></popup-picker>
-      <popup-picker title="业务类型" v-model="service"></popup-picker>
+      <x-input title="投保单号" placeholder="请输入投保单号" v-model="form.gwWfLogDto.businessNo"></x-input>
+      <popup-picker title="险种" v-model="form.gwWfLogDto.riskOrPlan" :data="product" ></popup-picker>
+      <popup-picker title="业务类型" v-model="form.gwWfLogDto.businessType" :data="service"></popup-picker>
       <cell-box align-items="flex-start">
-        <x-input title="审核级别" placeholder="请输入" v-model="startLevel"></x-input>
-        <x-input title="至" placeholder="请输入" v-model="endLevel"></x-input>
+        <x-input title="审核级别" placeholder="请输入" v-model="form.gwWfLogDto.firstTrial"></x-input>
+        <x-input title="至" placeholder="请输入" v-model="form.gwWfLogDto.firstTrial"></x-input>
       </cell-box>
-      <datetime title="查询时间" v-model="searchDate"></datetime>
+      <datetime title="查询时间" v-model="form.gwWfLogDto.submitTime"></datetime>
       <group-title>任务状态</group-title>
-      <checker v-model="taskStatus" type="checkbox" default-item-class="task-default" selected-item-class="task-selected">
+      <checker v-model="form.gwWfLogDto.nodeStatus" type="checkbox" default-item-class="task-default" selected-item-class="task-selected">
         <checker-item  v-for="status in taskStatuses"
                        :key="status.id"
                        :value="status">
@@ -37,28 +37,29 @@
     CheckerItem,
     XButton
   } from 'vux'
+  import carService from '../carService'
+  import {taskQuery} from 'business'
   export default {
     name: 'car-uw-check-task',
-    components: {
-      Group,
-      GroupTitle,
-      XInput,
-      PopupPicker,
-      CellBox,
-      Datetime,
-      Checker,
-      CheckerItem,
-      XButton
-    },
     data () {
       return {
-        policyNo: '',
-        product: ['08-汽车险', '0802-机动车商业险'],
-        service: ['申报'],
-        startLevel: '',
-        endLevel: '',
-        searchDate: '2017-12-05',
-        taskStatus: [],
+        form: {
+          gwWfLogDto: {
+            businessNo: '',
+            riskOrPlan: [],
+            businessType: [],
+            firstTrial: '',
+            submitTime: '',
+            nodeStatus: '',
+            operatorShowName: ''
+          },
+          pagination: {
+            pageNo: '0',
+            rowsPerPage: '8'
+          }
+        },
+        product: [['08-汽车险', '0802-机动车商业险']],
+        service: [['申报']],
         taskStatuses: [
           {
             id: 301,
@@ -81,14 +82,26 @@
     },
 
     create () {
+      this.$store.commit('UPDATE_NAVIGATION_TITLE', {
+          navigationTitle: '核保任务查询'
+        })
     },
     methods: {
       searchBtnClicked () {
-        this.$store.commit('UPDATE_NAVIGATION_TITLE', {
-          navigationTitle: '查询结果'
-        })
+        taskQuery.initTaskQuery(this.form);
       }
-    }
+    },
+    components: {
+      Group,
+      GroupTitle,
+      XInput,
+      PopupPicker,
+      CellBox,
+      Datetime,
+      Checker,
+      CheckerItem,
+      XButton
+    },
   }
 </script>
 

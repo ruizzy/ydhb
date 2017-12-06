@@ -2,12 +2,10 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../components/Home'
 import User from '../components/User'
-import CarUWHome from '../components/carUWComponents/CarUWHome'
-import CarUWCheckTask from '../components/carUWComponents/CarUWCheckTask'
-import CarUWProcessTask from '../components/carUWComponents/CarUWProcessTask'
-import CarUWSearchResult from '../components/carUWComponents/CarUWSearchResult'
-import mocktest from '../components/test/mocktest'
-import item from '../components/test/item'
+import CarUWHome from '../components/car_undwrt/module/CarUWHome'
+import CarUWCheckTask from '../components/car_undwrt/module/CarUWCheckTask'
+import CarUWProcessTask from '../components/car_undwrt/module/CarUWProcessTask'
+import CarUWSearchResult from '../components/car_undwrt/module/CarUWSearchResult'
 
 Vue.use(VueRouter)
 const routes = [
@@ -43,14 +41,6 @@ const routes = [
     path: '/',
     component: Home
   },
-  {
-    path: '/mocktest', // 测试用zgr
-    component: mocktest
-  },
-  {
-    path: '/item', // 测试用zgr
-    component: item
-  }
 ]
 
 const router = new VueRouter({
