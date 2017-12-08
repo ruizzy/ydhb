@@ -40,6 +40,7 @@ axios.interceptors.request.use((config) => {
     }
     nprogressNum == 0 && NProgress.start();
     nprogressNum++;
+    console.log("请求参数："+JSON.stringify(config.data, null, 4));
     if(config.data && config.data.content_type) {
         delete config.data.content_type;
         config.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
@@ -65,7 +66,7 @@ axios.interceptors.response.use((response) => {
         --shadeNum;
     }
     (!--nprogressNum) && NProgress.done();
-
+    console.log("返回参数："+JSON.stringify(response.data.datas, null, 4));
     if (typeof response.data.datas == "object") {
         let code = response.data.data.code,
             msg = response.data.data.msg || "登录失效"
