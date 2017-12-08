@@ -66,7 +66,7 @@ axios.interceptors.response.use((response) => {
         --shadeNum;
     }
     (!--nprogressNum) && NProgress.done();
-    console.log("返回参数："+JSON.stringify(response.data.datas, null, 4));
+    console.log("返回参数："+response.data.datas);
     if (typeof response.data.datas == "object") {
         let code = response.data.data.code,
             msg = response.data.data.msg || "登录失效"

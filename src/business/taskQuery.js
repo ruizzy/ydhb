@@ -8,18 +8,18 @@ const taskQuery = {}
 
 taskQuery.temp = {
     gwWfLogDto: {
-        businessNo: '',
-        riskOrPlan: [],
-        businessType: [],
-        firstTrial: '',
-        submitTime: '',
-        nodeStatus: '',
-        operatorShowName: ''
+        businessNo: null,
+        riskCode: null,
+        businessType: null,
+        firstTrial: null,
+        submitTime: null,
+        nodeStatus: null,
+        operatorShowName: null
       },
     pagination: {
         pageNo: '0',
         rowsPerPage: '8'
-    }
+    },
 }
 // ================================ methods ============================
 /**
