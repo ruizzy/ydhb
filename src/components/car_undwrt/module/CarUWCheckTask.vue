@@ -5,8 +5,8 @@
            label-margin-right='15px'
            gutter="0">
       <x-input title="投保单号" placeholder="请输入投保单号" v-model="form.gwWfLogDto.businessNo"></x-input>
-      <popup-picker title="险种" v-model="form.gwWfLogDto.riskOrPlan" :data="product" ></popup-picker>
-      <popup-picker title="业务类型" v-model="form.gwWfLogDto.businessType" :data="service"></popup-picker>
+      <popup-picker title="险种" v-model="riskCode" :data="product" ></popup-picker>
+      <popup-picker title="业务类型" v-model="businessType" :data="service"></popup-picker>
       <cell-box align-items="flex-start">
         <x-input title="审核级别" placeholder="请输入" v-model="form.gwWfLogDto.firstTrial"></x-input>
         <x-input title="至" placeholder="请输入" v-model="form.gwWfLogDto.firstTrial"></x-input>
@@ -45,19 +45,21 @@
       return {
         form: {
           gwWfLogDto: {
-            businessNo: '',
-            riskOrPlan: [],
-            businessType: [],
-            firstTrial: '',
-            submitTime: '',
-            nodeStatus: '',
-            operatorShowName: ''
+            businessNo: '132323',
+            riskCode: null,
+            businessType: null,
+            firstTrial: null,
+            submitTime: null,
+            nodeStatus: null,
+            operatorShowName: null
           },
           pagination: {
             pageNo: '0',
             rowsPerPage: '8'
-          }
+          },
         },
+        riskCode:[],
+        businessType:[],
         product: [['08-汽车险', '0802-机动车商业险']],
         service: [['申报']],
         taskStatuses: [

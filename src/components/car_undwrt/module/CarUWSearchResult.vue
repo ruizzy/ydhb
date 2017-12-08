@@ -36,7 +36,6 @@
       this.$store.commit('UPDATE_NAVIGATION_TITLE', {
           navigationTitle: '查询结果'
         });
-        console.log("请求/car/undwrtTaskQuery参数："+JSON.stringify(taskQuery.temp, null, 4));
       carService.undwrtTaskQuery(taskQuery.temp).then(res => {
         console.log(res.data);
       },res => {
