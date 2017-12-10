@@ -11,11 +11,11 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/PC_EMOBILEMNG/': {
-        target: 'http://127.0.0.1:10001/PC_EMOBILEMNG',
+      '/PEMNG/': {
+        target: 'http://172.16.204.82:10001/PEMNG',
         changeOrigin: true,
         pathRewrite: {
-          '^/PC_EMOBILEMNG/': '/'
+          '^/PEMNG/': '/'
         }
       }
     },
@@ -63,7 +63,7 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsPublicPath: './',
 
     /**
      * Source Maps

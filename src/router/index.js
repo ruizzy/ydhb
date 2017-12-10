@@ -6,6 +6,8 @@ import CarUWHome from '../components/car_undwrt/module/CarUWHome'
 import CarUWCheckTask from '../components/car_undwrt/module/CarUWCheckTask'
 import CarUWProcessTask from '../components/car_undwrt/module/CarUWProcessTask'
 import CarUWSearchResult from '../components/car_undwrt/module/CarUWSearchResult'
+import CarUWSearchResult_a from '../components/car_undwrt/module/CarUWSearchResult_a'
+import pullupPage from '../components/car_undwrt/module/pullupPage'
 
 Vue.use(VueRouter)
 const routes = [
@@ -28,6 +30,14 @@ const routes = [
   {
     path: '/carUWSearchResult/:isProcess',
     component: CarUWSearchResult
+  },
+  {
+    path: '/CarUWSearchResult_a/:isProcess',
+    component: CarUWSearchResult_a
+  },
+  {
+    path: '/pullupPage',
+    component: pullupPage
   },
   {
     path: '/user',

@@ -1,8 +1,8 @@
 import Vue from 'vue'
 
 const Service = {};
-
-Service.getItem = params => {
-    return Vue.http.post('/car/getItem', params);
+//ÓÃ»§×¢Ïú
+Service.cancelUser = params => {
+    return Vue.http.post('/app/cancelUser', params);
 };
 export default Service;

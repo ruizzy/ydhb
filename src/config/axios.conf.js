@@ -68,10 +68,11 @@ axios.interceptors.response.use((response) => {
     (!--nprogressNum) && NProgress.done();
     console.log("返回参数："+response.data.datas);
     if (typeof response.data.datas == "object") {
-        let code = response.data.data.code,
-            msg = response.data.data.msg || "登录失效"
+        let code = response.data.datas.code,
+            msg = response.data.datas.msg || "登录失效"
         if (code == "099") {
-            this.$router.push('/login');
+            //this.$router.push('/login');
+            console.log(msg);
         }
     }
     return response;

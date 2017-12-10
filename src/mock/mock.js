@@ -20,7 +20,7 @@ export default {
     });
 
     //核保任务查询
-    mock.onPost('/PC_EMOBILEMNG/car/undwrtTaskQuery').reply(config => {
+    mock.onPost('/PEMNG/car/undwrtTaskQuery').reply(config => {
       return new Promise((resolve, reject) => {
         setTimeout(() => {
             resolve([200, undwrtTaskQuery]);
@@ -29,7 +29,7 @@ export default {
     });
 
     //核保任务处理
-    mock.onPost('/PC_EMOBILEMNG/car/undwrtTaskHandle').reply(config => {
+    mock.onPost('/PEMNG/car/undwrtTaskHandle').reply(config => {
       return new Promise((resolve, reject) => {
         setTimeout(() => {
             resolve([200, undwrtTaskHandle]);

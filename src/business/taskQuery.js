@@ -6,7 +6,7 @@ import Vue from 'vue'
 
 const taskQuery = {}
 
-taskQuery.temp = {
+taskQuery.request = {
     gwWfLogDto: {
         businessNo: null,
         riskCode: null,
@@ -21,11 +21,23 @@ taskQuery.temp = {
         rowsPerPage: '8'
     },
 }
+taskQuery.response = {
+    gwWfLogDtoList: null,
+}
 // ================================ methods ============================
 /**
  * @Param obj 查询条件
  */
 taskQuery.initTaskQuery = (obj) => {
-    Object.assign(taskQuery.temp, obj);
+    Object.assign(taskQuery.request, obj);
 };
+
+taskQuery.refreshPagination = (obj) => {
+    if (!!obj) {
+        Object.assign(taskQuery.request.pagination, obj)
+    } else {
+      let nextPage = taskQuery.request.pagination.pageNo
+      taskQuery.request.pagination.pageNo = ++nextPage
+    }
+  }
 export default taskQuery
