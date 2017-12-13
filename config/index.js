@@ -11,11 +11,11 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/PEMNG/': {
-        target: 'http://172.16.204.82:10001/PEMNG',
+      '/SL_PEMNG/': {
+        target: 'http://172.16.204.82:10001/SL_PEMNG',
         changeOrigin: true,
         pathRewrite: {
-          '^/PEMNG/': '/'
+          '^/SL_PEMNG/': '/'
         }
       }
     },
