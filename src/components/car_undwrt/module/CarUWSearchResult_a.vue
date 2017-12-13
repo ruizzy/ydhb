@@ -45,7 +45,7 @@
         console.log(res.data);
         taskQuery.response.gwWfLogDtoList = res.data.data.gwWfLogDtoList;
         this.initList(taskQuery.response.gwWfLogDtoList);
-      },res => {
+      }, res => {
         console.log(res.data);
       });
     },
@@ -85,7 +85,7 @@
     },
     computed: {
     },
-    components: { 
+    components: {
       Scroller,
       Divider,
       XSwitch,

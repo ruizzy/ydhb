@@ -1,11 +1,12 @@
 <template>
   <div id="home-menu">
+    <img class="background-image" src="../assets/img/background.png"/>
     <grid :cols="3">
       <grid-item class="menu" v-for="menu in menus"
                  :key="menu.id"
                  :label="menu.label"
                  :link="menu.link"
-                 @on-item-click="selectMenu(menu.label)">
+                 @on-item-click="selectMenu(menu)">
         <img slot="icon" :src="menu.icon"/>
       </grid-item>
     </grid>
@@ -29,25 +30,25 @@
           {
             id: 101,
             label: '车险核保',
-            icon: require('../assets/img/carUW.png'),
+            icon: require('../assets/img/car-uw.png'),
             link: '/carUWHome'
           },
           {
             id: 102,
             label: '非车核保',
-            icon: require('../assets/img/nonCarUW.png'),
-            link: '/mocktest'
+            icon: require('../assets/img/non-car-uw.png'),
+            link: ''
           },
           {
             id: 103,
             label: '报表中心',
-            icon: require('../assets/img/formCenter.png'),
+            icon: require('../assets/img/form-center.png'),
             link: ''
           },
           {
             id: 104,
             label: '催办事项',
-            icon: require('../assets/img/emergency.png'),
+            icon: require('../assets/img/urgency.png'),
             link: ''
           }
         ]
@@ -57,7 +58,6 @@
       const width = window.innerWidth ||
         document.documentElement.clientWidth ||
         document.body.clientWidth
-      console.log(width)
 
       Array.prototype.forEach.call(
         document.getElementById('home-menu').getElementsByClassName('weui-grid'),
@@ -65,22 +65,26 @@
           grid.style.width = ((width - 40) / 3).toString() + 'px'
         })
 
-      this.$store.commit('UPDATE_SHOW_BACK', {
-        showBack: false
-      })
-
-      this.$store.commit('UPDATE_NAVIGATION_TITLE', {
-        navigationTitle: ''
+      this.$store.commit('UPDATE_SHOW_NAVIGATIONBAR', {
+        showNavigationBar: false
       })
     },
     methods: {
-      selectMenu (title) {
+      selectMenu (menu) {
+        if (menu.link.length === 0) {
+          return
+        }
+
+        this.$store.commit('UPDATE_SHOW_NAVIGATIONBAR', {
+          showNavigationBar: true
+        })
+
         this.$store.commit('UPDATE_SHOW_BACK', {
           showBack: true
         })
 
         this.$store.commit('UPDATE_NAVIGATION_TITLE', {
-          navigationTitle: title
+          navigationTitle: menu.label
         })
       }
     }
@@ -90,18 +94,39 @@
 <style lang="less">
   #home-menu {
 
+    .background-image {
+      width: 100%;
+      height: 200px;
+    }
+
+    .weui-grids:before {
+      display: none;
+    }
+
+    .weui-grids:after {
+      display: none;
+    }
+
     .weui-grids {
-      border: none;
+
       margin: 5px;
 
+      .weui-grid:before {
+        display: none;
+      }
+
+      .weui-grid:after {
+        display: none;
+      }
+
       .weui-grid {
-        border: none;
+
         margin: 5px;
         padding: 5px;
 
         .weui-grid__icon {
-          height: 50px;
-          width: 50px;
+          height: 75px;
+          width: 75px;
         }
 
         .weui-grid__label {
@@ -110,5 +135,6 @@
         }
       }
     }
+
   }
 </style>

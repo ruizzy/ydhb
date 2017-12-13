@@ -10,12 +10,12 @@
     </transition>
     <transition name="fade">
       <tabbar v-show="barOPT.show">
-        <tabbar-item :link="'/home'" selected @on-item-click="selectHome">
+        <tabbar-item :link="'/home'" selected>
           <img slot="icon" src= "./assets/img/home-default.png"/>
           <img slot="icon-active" src= "./assets/img/home-selected.png"/>
           <span slot="label">首页</span>
         </tabbar-item>
-        <tabbar-item :link="'/user'" @on-item-click="selectUser">
+        <tabbar-item :link="'/user'">
           <img slot="icon" src="./assets/img/account-default.png"/>
           <img slot="icon-active" src="./assets/img/account-selected.png"/>
           <span slot="label">个人</span>
@@ -88,22 +88,6 @@
     },
 
     methods: {
-      selectHome () {
-        this.$store.commit('UPDATE_SHOW_BACK', {
-          showBack: false
-        })
-        this.$store.commit('UPDATE_SHOW_NAVIGATIONBAR', {
-          showNavigationBar: true
-        })
-      },
-      selectUser () {
-        this.$store.commit('UPDATE_SHOW_BACK', {
-          showBack: false
-        })
-        this.$store.commit('UPDATE_SHOW_NAVIGATIONBAR', {
-          showNavigationBar: false
-        })
-      }
     },
 
     computed: {
@@ -142,6 +126,7 @@
   @import '~vux/src/styles/reset.less';
 
   #app {
+
     .vux-header.navigation-header {
       height: 64px;
       background-color: #c20000;
@@ -164,6 +149,16 @@
         line-height: 44px;
         position: relative;
         top: 20px;
+      }
+    }
+
+    .weui-tabbar {
+
+      .weui-tabbar__item.weui-bar__item_on {
+
+        .weui-tabbar__label {
+          color: #c20000;
+        }
       }
     }
   }
