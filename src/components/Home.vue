@@ -1,6 +1,6 @@
 <template>
-  <div id="home-menu">
-    <img class="background-image" src="../assets/img/background.png"/>
+  <div id="home">
+    <img class="head-image" src="../assets/img/home-head.png"/>
     <grid :cols="3">
       <grid-item class="menu" v-for="menu in menus"
                  :key="menu.id"
@@ -60,7 +60,7 @@
         document.body.clientWidth
 
       Array.prototype.forEach.call(
-        document.getElementById('home-menu').getElementsByClassName('weui-grid'),
+        document.getElementById('home').getElementsByClassName('weui-grid'),
         function (grid) {
           grid.style.width = ((width - 40) / 3).toString() + 'px'
         })
@@ -92,11 +92,11 @@
 </script>
 
 <style lang="less">
-  #home-menu {
+  #home {
 
-    .background-image {
+    .head-image {
       width: 100%;
-      height: 200px;
+      height: 150px;
     }
 
     .weui-grids:before {

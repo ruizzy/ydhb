@@ -3,7 +3,7 @@
     <x-header class="navigation-header"
               :left-options="{backText: '', showBack: showBack}"
               v-show="showNavigationBar">
-              <span v-show="title.length">{{ title }}</span>
+      <span v-show="title.length">{{ title }}</span>
     </x-header>
     <transition :name="'vux-pop-' + (direction === 'forward' ? 'in' : 'out')">
       <router-view></router-view>
@@ -22,6 +22,7 @@
         </tabbar-item>
       </tabbar>
     </transition>
+
     <!-- 以下是公共组件 -->
     <loading v-model="showLoading" text="载入中"></loading>
     <toast v-model="toastOPT.show" type="text" :width="toastOPT.width" :class="{ 'toast-text':toastOPT.type =='text' }">
@@ -46,6 +47,7 @@
 
 <script>
   import {
+    ViewBox,
     XHeader,
     Loading,
     Toast,
@@ -58,6 +60,7 @@
     name: 'app',
 
     components: {
+      ViewBox,
       XHeader,
       Loading,
       Toast,
@@ -153,7 +156,7 @@
     }
 
     .weui-tabbar {
-
+      height: 49px;
       .weui-tabbar__item.weui-bar__item_on {
 
         .weui-tabbar__label {

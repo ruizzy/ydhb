@@ -1,7 +1,8 @@
 <template>
   <div id="car-uw-menu">
     <group gutter="0">
-      <cell v-for="menu in menus"
+      <cell :border-intent="false"
+            v-for="menu in menus"
             :key="menu.id"
             :title="menu.title"
             :is-link="true"
@@ -55,9 +56,9 @@
     .weui-cell {
       height: 25px;
 
-      .vux-label {
-        font-size: 14px;
+      .vux-cell-bd {
         color: #333333;
+        font-size: 14px;
       }
     }
   }

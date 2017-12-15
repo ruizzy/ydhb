@@ -32,15 +32,15 @@
       return {
       }
     },
-    created() {
+    created () {
       this.$store.commit('UPDATE_NAVIGATION_TITLE', {
-          navigationTitle: '查询结果'
-        });
+        navigationTitle: '查询结果'
+      })
       carService.undwrtTaskQuery(taskQuery.temp).then(res => {
         console.log(res.data);
-      },res => {
+      }, res => {
         console.log(res.data);
-      });
+      })
     },
     computed: {
 
