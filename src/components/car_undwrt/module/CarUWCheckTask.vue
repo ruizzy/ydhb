@@ -5,19 +5,20 @@
            label-margin-right='15px'
            gutter="0">
       <x-input title="投保单号" placeholder="请输入投保单号" v-model="form.gwWfLogDto.businessNo"></x-input>
-      <popup-picker title="险种" v-model="riskCode" :data="product" ></popup-picker>
-      <popup-picker title="业务类型" v-model="businessType" :data="service"></popup-picker>
+      <popup-radio title="险种" :options="page.riskCodes" v-model="form.gwWfLogDto.riskCode" placeholder=""></popup-radio>
+      <popup-radio title="业务类型" :options="page.businessTypes" v-model="form.gwWfLogDto.businessType" placeholder=""></popup-radio>
       <cell-box align-items="flex-start">
-        <x-input title="审核级别" placeholder="请输入" v-model="form.gwWfLogDto.firstTrial"></x-input>
-        <x-input title="至" placeholder="请输入" v-model="form.gwWfLogDto.firstTrial"></x-input>
+        <x-input title="审核级别" placeholder="请输入" v-model="form.gwWfLogDto.minNodeNo"></x-input>
+        <x-input title="至" placeholder="请输入" v-model="form.gwWfLogDto.maxNodeNo"></x-input>
       </cell-box>
-      <datetime title="查询时间" v-model="form.gwWfLogDto.submitTime"></datetime>
+      <datetime title="起始时间" v-model="form.gwWfLogDto.flowInTime_ForQueryStart" clear-text="今天" @on-clear="setToday('0')"></datetime>
+      <datetime title="结束时间" v-model="form.gwWfLogDto.flowInTime_ForQueryEnd" clear-text="今天" @on-clear="setToday('1')"></datetime>
       <group-title>任务状态</group-title>
-      <checker v-model="form.gwWfLogDto.nodeStatus" type="checkbox" default-item-class="task-default" selected-item-class="task-selected">
-        <checker-item  v-for="status in taskStatuses"
-                       :key="status.id"
-                       :value="status">
-          {{status.value}}
+      <checker v-model="nodeStatus" type="checkbox" default-item-class="task-default" selected-item-class="task-selected">
+        <checker-item v-for="status in page.taskStatuses"
+                       :key="status.key"
+                       :value="status.value">
+          {{status.key}}
         </checker-item>
       </checker>
     </group>
@@ -30,12 +31,12 @@
     Group,
     GroupTitle,
     XInput,
-    PopupPicker,
     CellBox,
     Datetime,
     Checker,
     CheckerItem,
-    XButton
+    XButton,
+    PopupRadio
   } from 'vux'
   import carService from '../carService'
   import {taskQuery} from 'business'
@@ -43,72 +44,84 @@
     name: 'car-uw-check-task',
     data () {
       return {
+        page: taskQuery.page,
+        nodeStatus: ['1','2,3'],
         form: {
-          gwWfLogDto: {
-            businessNo: '132323',
-            riskCode: null,
-            businessType: null,
-            firstTrial: null,
-            submitTime: null,
-            nodeStatus: null,
-            operatorShowName: null
+            gwWfLogDto: {
+            businessNo: '',
+            riskCode: '',
+            businessType: '',
+            minNodeNo: '',
+            maxNodeNo: '',
+            flowInTime_ForQueryStart: '',
+            flowInTime_ForQueryEnd: '',
+            nodeStatus: '',
+            operatorShowName: ''
           },
           pagination: {
-            pageNo: '0',
-            rowsPerPage: '8'
+            pageNo: 0,
+            rowsPerPage: 8
           },
-        },
-        riskCode:[],
-        businessType:[],
-        product: [['08-汽车险', '0802-机动车商业险']],
-        service: [['申报']],
-        taskStatuses: [
-          {
-            id: 301,
-            value: '待处理'
-          },
-          {
-            id: 302,
-            value: '暂存'
-          },
-          {
-            id: 303,
-            value: '下发修改'
-          },
-          {
-            id: 304,
-            value: '处理完毕'
-          }
-        ]
+        }
       }
     },
 
-    create () {
+    created () {
       this.$store.commit('UPDATE_NAVIGATION_TITLE', {
           navigationTitle: '核保任务查询'
-        })
+        });
+        this.initDate();
     },
     methods: {
-      searchBtnClicked () {
+      searchBtnClicked() {
+        if(!!this.nodeStatus){
+            this.form.gwWfLogDto.nodeStatus = this.nodeStatus.join(",")
+        }
         taskQuery.initTaskQuery(this.form);
-      }
+      },
+      initDate(type) {
+        let now = new Date()
+        let cmonth = now.getMonth() + 1
+        let day = now.getDate()
+        if (cmonth < 10) cmonth = '0' + cmonth
+        if (day < 10) day = '0' + day
+        let today = now.getFullYear() + '-' + cmonth + '-' + day
+        let yesterday = now.getFullYear() + '-' + cmonth + '-' + day
+        if(type == '0'){
+            this.form.gwWfLogDto.flowInTime_ForQueryStart = today
+        }else if(type == '1'){
+            this.form.gwWfLogDto.flowInTime_ForQueryEnd = today
+        }else{
+            this.form.gwWfLogDto.flowInTime_ForQueryStart = this.setYesterday()
+            this.form.gwWfLogDto.flowInTime_ForQueryEnd = today
+        }
+      },
+      setYesterday(){
+        let day = new Date();
+        day.setTime(day.getTime()-24*60*60*1000);
+        let s1 = day.getFullYear()+"-" + (day.getMonth()+1) + "-" + day.getDate();
+        return s1;
+      },
     },
     components: {
       Group,
       GroupTitle,
       XInput,
-      PopupPicker,
       CellBox,
       Datetime,
       Checker,
       CheckerItem,
-      XButton
+      XButton,
+      PopupRadio
     },
   }
 </script>
 
 <style lang="less">
   #car-uw-check-task {
+    .weui-cell p label{
+        font-size: 14px;
+    }
     .vux-x-input.weui-cell {
       font-size: 14px;
       height: 25px;
