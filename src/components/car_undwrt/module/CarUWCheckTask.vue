@@ -11,8 +11,8 @@
         <x-input title="审核级别" placeholder="请输入" v-model="form.gwWfLogDto.minNodeNo"></x-input>
         <x-input title="至" placeholder="请输入" v-model="form.gwWfLogDto.maxNodeNo"></x-input>
       </cell-box>
-      <datetime title="起始时间" v-model="form.gwWfLogDto.flowInTime_ForQueryStart" clear-text="今天" @on-clear="setToday('0')"></datetime>
-      <datetime title="结束时间" v-model="form.gwWfLogDto.flowInTime_ForQueryEnd" clear-text="今天" @on-clear="setToday('1')"></datetime>
+      <datetime title="起始时间" v-model="form.gwWfLogDto.flowInTime_ForQueryStart" clear-text="今天" @on-clear="initDate('0')"></datetime>
+      <datetime title="结束时间" v-model="form.gwWfLogDto.flowInTime_ForQueryEnd" clear-text="今天" @on-clear="initDate('1')"></datetime>
       <group-title>任务状态</group-title>
       <checker v-model="nodeStatus" type="checkbox" default-item-class="task-default" selected-item-class="task-selected">
         <checker-item v-for="status in page.taskStatuses"
@@ -56,10 +56,9 @@
             flowInTime_ForQueryStart: '',
             flowInTime_ForQueryEnd: '',
             nodeStatus: '',
-            operatorShowName: ''
           },
           pagination: {
-            pageNo: 0,
+            pageNo: 1,
             rowsPerPage: 8
           },
         }
@@ -68,7 +67,7 @@
 
     created () {
       this.$store.commit('UPDATE_NAVIGATION_TITLE', {
-          navigationTitle: '核保任务查询'
+          navigationTitle: '核保任务查看'
         });
         this.initDate();
     },
@@ -86,7 +85,6 @@
         if (cmonth < 10) cmonth = '0' + cmonth
         if (day < 10) day = '0' + day
         let today = now.getFullYear() + '-' + cmonth + '-' + day
-        let yesterday = now.getFullYear() + '-' + cmonth + '-' + day
         if(type == '0'){
             this.form.gwWfLogDto.flowInTime_ForQueryStart = today
         }else if(type == '1'){

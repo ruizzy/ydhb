@@ -50,6 +50,8 @@
           loadingContent: '载入中',
           clsPrefix: 'xs-plugin-pullup-'
         },
+
+        pagination: taskQuery.req.pagination,
         list: []
       }
     },
@@ -66,8 +68,8 @@
         this.list = this.list.concat(datas)
       },
       loadMore () {
+        taskQuery.refreshPagination(this.pagination)
         setTimeout(() => {
-          taskQuery.refreshPagination(this.pagination)
           carService.undwrtTaskQuery(taskQuery.req).then(res => {
             taskQuery.res.gwWfLogDtoList = res.data.datas.gwWfLogDtoList
             let pageSize = taskQuery.req.pagination.rowsPerPage
