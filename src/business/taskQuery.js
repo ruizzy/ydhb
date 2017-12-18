@@ -6,40 +6,39 @@
 const taskQuery = {}
 
 taskQuery.req = {
-    gwWfLogDto: {
-        businessNo: '',
-        riskCode: '',
-        businessType: '',
-        firstTrial: '',
-        submitTime: '',
-        nodeStatus: '',
-        operatorShowName: ''
-      },
-    pagination: {
-        pageNo: 0,
-        rowsPerPage: 8
-    },
+  gwWfLogDto: {
+    businessNo: '',
+    riskCode: '',
+    businessType: '',
+    firstTrial: '',
+    submitTime: '',
+    nodeStatus: '',
+    operatorShowName: ''
+  },
+  pagination: {
+    pageNo: 0,
+    rowsPerPage: 8
+  }
 }
 taskQuery.res = {
-    gwWfLogDtoList: null,
+  gwWfLogDtoList: null
 }
 // ================================ methods ============================
 /**
  * @Param obj 查询条件
  */
 taskQuery.initTaskQuery = (obj) => {
-    Object.assign(taskQuery.req, obj);
-};
+  Object.assign(taskQuery.req, obj)
+}
 
 taskQuery.refreshPagination = (obj) => {
-    if (!!obj) {
-        Object.assign(taskQuery.req.pagination, obj)
-    } else {
-      let nextPage = taskQuery.req.pagination.pageNo
-      taskQuery.req.pagination.pageNo = ++nextPage
-    }
+  if (!!obj) {
+    Object.assign(taskQuery.req.pagination, obj)
+  } else {
+    let nextPage = taskQuery.req.pagination.pageNo
+    taskQuery.req.pagination.pageNo = ++nextPage
   }
-
+}
 
 taskQuery.page = {
     riskCodes:[{

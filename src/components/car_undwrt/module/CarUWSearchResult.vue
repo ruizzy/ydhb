@@ -31,9 +31,9 @@
     data () {
       return {
         noData: false,
-        height:'500px',
+        height: '500px',
         pagination: {
-            pageNo: 1,
+          pageNo: 1
         },
         labels: {
           text_a: '业务号',
@@ -50,57 +50,57 @@
           loadingContent: '载入中',
           clsPrefix: 'xs-plugin-pullup-'
         },
-        list: [],
+        list: []
       }
     },
-    created() {
+    created () {
       this.$store.commit('UPDATE_NAVIGATION_TITLE', {
-          navigationTitle: '查询结果'
-        });
-      this.loadMore();
-      this.pagination = null;
+        navigationTitle: '查询结果'
+      })
+      this.loadMore()
+      this.pagination = null
     },
     methods: {
-      initList(datas) {
-        this.$route.params.isProcess === 'true' && (this.label.text_b = '处理人',this.label.text_c = '撤回');
+      initList (datas) {
+        this.$route.params.isProcess === 'true' && (this.label.text_b = '处理人', this.label.text_c = '撤回')
         this.list = this.list.concat(datas)
       },
       loadMore () {
         setTimeout(() => {
           taskQuery.refreshPagination(this.pagination)
           carService.undwrtTaskQuery(taskQuery.req).then(res => {
-            taskQuery.res.gwWfLogDtoList = res.data.datas.gwWfLogDtoList;
-            let pageSize = taskQuery.req.pagination.rowsPerPage;
+            taskQuery.res.gwWfLogDtoList = res.data.datas.gwWfLogDtoList
+            let pageSize = taskQuery.req.pagination.rowsPerPage
             let len = taskQuery.res.gwWfLogDtoList.length;
-            (len < pageSize) && (this.$refs.scroller.disablePullup(),this.noData = true);
-            (len == pageSize && this.noData) && (this.$refs.scroller.enablePullup(),this.noData = false)
-            this.initList(taskQuery.res.gwWfLogDtoList);
+            (len < pageSize) && (this.$refs.scroller.disablePullup(), this.noData = true);
+            (len == pageSize && this.noData) && (this.$refs.scroller.enablePullup(), this.noData = false)
+            this.initList(taskQuery.res.gwWfLogDtoList)
             this.$nextTick(() => {
-              if(taskQuery.req.pagination.pageNo === 1){
+              if (taskQuery.req.pagination.pageNo === 1) {
                 this.$refs.scroller.reset({
-                      top: 0
-                    })
-              }else{
+                  top: 0
+                })
+              } else {
                 this.$refs.scroller.donePullup()
                 this.$refs.scroller.reset()
               }
             })
-          },res => {
+          }, res => {
             console.log(res.data);
-          });
+          })
         }, 500)
       },
-      goTaskHandle(bodys) {
-        taskHandle.req.gwWfLogDto = bodys;
-        this.$route.params.isProcess === 'true' ? (taskHandle.req.viewInd = '0'): (taskHandle.req.viewInd = '1')
+      goTaskHandle (bodys) {
+        taskHandle.req.gwWfLogDto = bodys
+        this.$route.params.isProcess === 'true' ? (taskHandle.req.viewInd = '0') : (taskHandle.req.viewInd = '1')
         this.$router.push({
-                path: '/CarUWTaskHandle'
-              })
+          path: '/CarUWTaskHandle'
+        })
       }
     },
     computed: {
     },
-    components: { 
+    components: {
       Scroller,
       Divider,
       XSwitch,

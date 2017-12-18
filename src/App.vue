@@ -128,11 +128,15 @@
 <style lang="less">
   @import '~vux/src/styles/reset.less';
 
+  body {
+    padding-top: constant(safe-area-inset-top);
+  }
+
   #app {
 
     .vux-header.navigation-header {
       height: 64px;
-      background-color: #c20000;
+      background-color: #d42319;
 
       .vux-header-left {
         top: 3px;
@@ -157,13 +161,14 @@
 
     .weui-tabbar {
       height: 49px;
+      position: fixed;
+
       .weui-tabbar__item.weui-bar__item_on {
 
         .weui-tabbar__label {
-          color: #c20000;
+          color: #d42319;
         }
       }
     }
   }
-
 </style>
