@@ -25,7 +25,6 @@ import carService from '../carService'
 export default {
   data () {
     return {
-      data: taskHandle.res,
     }
   },
   created(){
@@ -39,12 +38,12 @@ export default {
     //下发修改提交操作
     submitJunior () {
       let params = {
-            flowId: this.data.prepareHandle.gwWfLogDto.flowId,
-            logNo: this.data.prepareHandle.gwWfLogDto.logNo,
+            flowId: taskHandle.res.prepareHandle.gwWfLogDto.flowId,
+            logNo: taskHandle.res.prepareHandle.gwWfLogDto.logNo,
             easyScanFlag: 'no',
-            nodeNo: this.data.gwWfLogDto.prepareHandle.gwWfLogDto.nodeNo,
-            nextStepType: this.data.gwWfLogDto.prepareHandle.gwWfLogDto.flag,
-            reasonType: '没原因'//下发原因
+            nodeNo: taskHandle.res.prepareHandle.gwWfLogDto.nodeNo,
+            nextStepType: taskHandle.res.prepareHandle.gwWfLogDto.flag,
+            reasonType: '02'//下发原因
         };
       carService.submitJunior(params).then(res => {
           Object.assign(taskHandle.res, {submitJunior: res.data.datas});
@@ -57,10 +56,10 @@ export default {
     prepareHandle () {
       let params = {
             handleText: '下发修改预操作',//下发
-            businessType: this.data.gwWfLogDto.businessType,
-            businessNo: this.data.gwWfLogDto.businessNo,
-            flowId: this.data.gwWfLogDto.flowId,
-            logNo: this.data.gwWfLogDto.logNo,
+            businessType: taskHandle.res.gwWfLogDto.businessType,
+            businessNo: taskHandle.res.gwWfLogDto.businessNo,
+            flowId: taskHandle.res.gwWfLogDto.flowId,
+            logNo: taskHandle.res.gwWfLogDto.logNo,
         };
       carService.prepareHandle(params).then(res => {
           Object.assign(taskHandle.res, {prepareHandle: res.data.datas});
@@ -72,7 +71,7 @@ export default {
     //提交上级
     submitSuperior () {
       let params = {
-            gwWfLogDto: this.data.gwWfLogDto,
+            gwWfLogDto: taskHandle.res.gwWfLogDto,
             gwSwfNodeDto: {
                 nodeNo: '9',
                 nodeCName: '高2级'
@@ -91,9 +90,9 @@ export default {
       let params = {
             handType: '11',//核保、核赔标志，不知道哪里取
             handleText: '意见很大',
-            flowId: this.data.gwWfLogDto.flowId,
-            logNo: this.data.gwWfLogDto.logNo,
-            businessNo: this.data.gwWfLogDto.businessNo,
+            flowId: taskHandle.res.gwWfLogDto.flowId,
+            logNo: taskHandle.res.gwWfLogDto.logNo,
+            businessNo: taskHandle.res.gwWfLogDto.businessNo,
         };
       carService.submitPassAudit(params).then(res => {
           Object.assign(taskHandle.res, {submitPassAudit: res.data.datas});
@@ -109,7 +108,7 @@ export default {
         viewInd: taskHandle.req.viewInd || data
       };
       carService.undwrtTaskHandle(params).then(res => {
-          taskHandle.res = res.data.datas;
+          Object.assign(taskHandle.res, res.data.datas);
           console.log(res.data.datas);
       },res => {
         console.log(res.data);
@@ -118,9 +117,9 @@ export default {
     //影像附件
     viewMaterialAdjunct () {
       let params = {
-            businessNo: this.data.gwWfLogDto.businessNo,
+            businessNo: taskHandle.res.gwWfLogDto.businessNo,
             businessSeqNo: '',
-            productRiskCode: this.data.gwWfLogDto.riskCode,
+            productRiskCode: taskHandle.res.gwWfLogDto.riskCode,
             businessType: 'Proposal',
             baseActionType: 'view',
         };
@@ -133,14 +132,14 @@ export default {
     },
     //平台信息
     queryCiPlatFormInfo () {
-      let planCode = this.data.gwWfLogDto.riskCode == '1363' ? '1363' : '0000'
+      let planCode = taskHandle.res.gwWfLogDto.riskCode == '1363' ? '1363' : '0000'
       let params = {
             planCode: planCode,
             businessType: 'Proposal',
-            productRiskCode: this.data.gwWfLogDto.riskCode,
+            productRiskCode: taskHandle.res.gwWfLogDto.riskCode,
             oldPolicyNo: '',
-            proposalNo: this.data.gwWfLogDto.businessNo,
-            businessNo: this.data.gwWfLogDto.businessNo,
+            proposalNo: taskHandle.res.gwWfLogDto.businessNo,
+            businessNo: taskHandle.res.gwWfLogDto.businessNo,
             timestamp: ''
         };
       carService.queryCiPlatFormInfo(params).then(res => {
@@ -154,7 +153,7 @@ export default {
     showNoAutoCheckInfo () {
       let params = {
             gwWfLogDto: {
-                businessNo: this.data.businessNo
+                businessNo: taskHandle.res.businessNo
             },
         };
       carService.showNoAutoCheckInfo(params).then(res => {
@@ -167,8 +166,8 @@ export default {
     //查看历次审核意见
     commonViewTrace () {
       let params = {
-            businessNo: this.data.gwWfLogDto.businessNo,
-            businessType: this.data.gwWfLogDto.businessType,
+            businessNo: taskHandle.res.gwWfLogDto.businessNo,
+            businessType: taskHandle.res.gwWfLogDto.businessType,
         };
       carService.commonViewTrace(params).then(res => {
         Object.assign(taskHandle.res, {commonViewTrace: res.data.datas})
@@ -182,7 +181,7 @@ export default {
     //获取验车码
     queryCarCheckCode () {
         let params = {
-            proposalNo: this.data.gwWfLogDto.businessNo
+            proposalNo: taskHandle.res.gwWfLogDto.businessNo
         };
       carService.queryCarCheckCode(params).then(res => {
         Object.assign(taskHandle.res, {carCheckCode: res.data.datas});

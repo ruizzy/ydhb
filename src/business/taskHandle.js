@@ -1,12 +1,12 @@
 /**
- * @Param businessNo 业务单号
+ * 核保处理
  */
 
 
 const taskHandle = {}
 
 taskHandle.req = {
-    gwWfLogDto: {},
+    gwWfLogDto: '',
     viewInd: '',
     pagination: {
         pageNo: 1,

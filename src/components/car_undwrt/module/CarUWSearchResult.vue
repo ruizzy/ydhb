@@ -27,10 +27,7 @@
     data () {
       return {
         noData: false,
-        height: '500px',
-        pagination: {
-          pageNo: 1
-        },
+        height:'500px',
         labels: {
           text_a: '业务号',
           text_b: '投保人',
@@ -59,8 +56,8 @@
       this.pagination = null
     },
     methods: {
-      initList (datas) {
-        this.$route.params.isProcess === 'true' && (this.label.text_b = '处理人', this.label.text_c = '撤回')
+      initList(datas) {
+        this.$route.params.isProcess === 'true' && (this.labels.text_b = '处理人',this.labels.text_c = '撤回');
         this.list = this.list.concat(datas)
       },
       loadMore () {

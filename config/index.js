@@ -12,7 +12,8 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/SL_PEMNG/': {
-        target: 'http://172.16.204.82:10001/SL_PEMNG',
+        //target: 'http://172.16.204.82:10001/SL_PEMNG',
+        target: 'http://192.168.13.44:8088/SL_PEMNG',
         changeOrigin: true,
         pathRewrite: {
           '^/SL_PEMNG/': '/'
