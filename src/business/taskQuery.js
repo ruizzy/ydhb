@@ -13,10 +13,13 @@ taskQuery.req = {
         firstTrial: '',
         submitTime: '',
         nodeStatus: '',
-        operatorShowName: ''
+        operatorShowName: '',
+        insuredName: '',
       },
+    guProposalMainDto: '',
+    guProposalItemMotorDto: '',
     pagination: {
-        pageNo: 0,
+        pageNo: 1,
         rowsPerPage: 8
     },
 }

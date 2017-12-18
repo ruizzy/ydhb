@@ -32,9 +32,6 @@
       return {
         noData: false,
         height:'500px',
-        pagination: {
-            pageNo: 1,
-        },
         labels: {
           text_a: '业务号',
           text_b: '投保人',
@@ -50,6 +47,7 @@
           loadingContent: '载入中',
           clsPrefix: 'xs-plugin-pullup-'
         },
+        pagination: taskQuery.req.pagination,
         list: [],
       }
     },
@@ -62,12 +60,12 @@
     },
     methods: {
       initList(datas) {
-        this.$route.params.isProcess === 'true' && (this.label.text_b = '处理人',this.label.text_c = '撤回');
+        this.$route.params.isProcess === 'true' && (this.labels.text_b = '处理人',this.labels.text_c = '撤回');
         this.list = this.list.concat(datas)
       },
       loadMore () {
+        taskQuery.refreshPagination(this.pagination)
         setTimeout(() => {
-          taskQuery.refreshPagination(this.pagination)
           carService.undwrtTaskQuery(taskQuery.req).then(res => {
             taskQuery.res.gwWfLogDtoList = res.data.datas.gwWfLogDtoList;
             let pageSize = taskQuery.req.pagination.rowsPerPage;
