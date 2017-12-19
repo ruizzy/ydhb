@@ -55,11 +55,8 @@
 
     .weui-cell {
       height: 25px;
-
-      .vux-cell-bd {
-        color: #333333;
-        font-size: 14px;
-      }
+      color: #333333;
+      font-size: 14px;
     }
   }
 </style>

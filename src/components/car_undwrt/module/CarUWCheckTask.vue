@@ -4,17 +4,45 @@
            label-align="left"
            label-margin-right='15px'
            gutter="0">
-      <x-input title="投保单号" placeholder="请输入投保单号" v-model="form.gwWfLogDto.businessNo"></x-input>
-      <popup-radio title="险种" :options="page.riskCodes" v-model="form.gwWfLogDto.riskCode" placeholder=""></popup-radio>
-      <popup-radio title="业务类型" :options="page.businessTypes" v-model="form.gwWfLogDto.businessType" placeholder=""></popup-radio>
+      <x-input title="投保单号"
+               placeholder="请输入投保单号"
+               v-model="form.gwWfLogDto.businessNo">
+      </x-input>
+      <popup-radio title="险种"
+                   :options="page.riskCodes"
+                   v-model="form.gwWfLogDto.riskCode"
+                   placeholder="请选择险种">
+      </popup-radio>
+      <popup-radio title="业务类型"
+                   :options="page.businessTypes"
+                   v-model="form.gwWfLogDto.businessType"
+                   placeholder="请选择业务类型">
+      </popup-radio>
       <cell-box align-items="flex-start">
-        <x-input title="审核级别" placeholder="请输入" v-model="form.gwWfLogDto.minNodeNo"></x-input>
-        <x-input title="至" placeholder="请输入" v-model="form.gwWfLogDto.maxNodeNo"></x-input>
+        <x-input title="审核级别"
+                 placeholder="请输入"
+                 v-model="form.gwWfLogDto.minNodeNo">
+        </x-input>
+        <x-input title="至"
+                 placeholder="请输入"
+                 v-model="form.gwWfLogDto.maxNodeNo">
+        </x-input>
       </cell-box>
-      <datetime title="起始时间" v-model="form.gwWfLogDto.flowInTime_ForQueryStart" clear-text="今天" @on-clear="initDate('0')"></datetime>
-      <datetime title="结束时间" v-model="form.gwWfLogDto.flowInTime_ForQueryEnd" clear-text="今天" @on-clear="initDate('1')"></datetime>
+      <datetime title="起始时间"
+                v-model="form.gwWfLogDto.flowInTime_ForQueryStart"
+                clear-text="今天"
+                @on-clear="initDate('0')">
+      </datetime>
+      <datetime title="结束时间"
+                v-model="form.gwWfLogDto.flowInTime_ForQueryEnd"
+                clear-text="今天"
+                @on-clear="initDate('1')">
+      </datetime>
       <group-title>任务状态</group-title>
-      <checker v-model="nodeStatus" type="checkbox" default-item-class="task-default" selected-item-class="task-selected">
+      <checker v-model="nodeStatus"
+               type="checkbox"
+               default-item-class="task-default"
+               selected-item-class="task-selected">
         <checker-item v-for="status in page.taskStatuses"
                        :key="status.key"
                        :value="status.value">
@@ -22,7 +50,10 @@
         </checker-item>
       </checker>
     </group>
-    <x-button text="查询" :link="'/carUWSearchResult/false'" @click.native="searchBtnClicked"></x-button>
+    <x-button text="查询"
+              :link="'/carUWSearchResult/false'"
+              @click.native="searchBtnClicked">
+    </x-button>
   </div>
 </template>
 
@@ -45,9 +76,9 @@
     data () {
       return {
         page: taskQuery.page,
-        nodeStatus: ['1','2,3'],
+        nodeStatus: ['1', '2,3'],
         form: {
-            gwWfLogDto: {
+          gwWfLogDto: {
             businessNo: '',
             riskCode: '',
             businessType: '',
@@ -55,51 +86,48 @@
             maxNodeNo: '',
             flowInTime_ForQueryStart: '',
             flowInTime_ForQueryEnd: '',
-            nodeStatus: '',
+            nodeStatus: ''
           },
           pagination: {
             pageNo: 1,
             rowsPerPage: 8
-          },
+          }
         }
       }
     },
 
     created () {
-      this.$store.commit('UPDATE_NAVIGATION_TITLE', {
-          navigationTitle: '核保任务查看'
-        });
-        this.initDate();
+      this.initDate()
     },
     methods: {
-      searchBtnClicked() {
-        if(!!this.nodeStatus){
-            this.form.gwWfLogDto.nodeStatus = this.nodeStatus.join(",")
+      searchBtnClicked () {
+        if (this.nodeStatus) {
+          this.form.gwWfLogDto.nodeStatus = this.nodeStatus.join(',')
         }
-        taskQuery.initTaskQuery(this.form);
+        taskQuery.initTaskQuery(this.form)
       },
-      initDate(type) {
+      initDate (type) {
         let now = new Date()
         let cmonth = now.getMonth() + 1
         let day = now.getDate()
         if (cmonth < 10) cmonth = '0' + cmonth
         if (day < 10) day = '0' + day
         let today = now.getFullYear() + '-' + cmonth + '-' + day
-        if(type == '0'){
-            this.form.gwWfLogDto.flowInTime_ForQueryStart = today
-        }else if(type == '1'){
-            this.form.gwWfLogDto.flowInTime_ForQueryEnd = today
-        }else{
-            this.form.gwWfLogDto.flowInTime_ForQueryStart = this.setYesterday()
-            this.form.gwWfLogDto.flowInTime_ForQueryEnd = today
+        if (type === '0'){
+          this.form.gwWfLogDto.flowInTime_ForQueryStart = today
+        } else if (type === '1'){
+          this.form.gwWfLogDto.flowInTime_ForQueryEnd = today
+        } else {
+          this.form.gwWfLogDto.flowInTime_ForQueryStart = this.setYesterday()
+          this.form.gwWfLogDto.flowInTime_ForQueryEnd = today
         }
       },
-      setYesterday(){
-        let day = new Date();
-        day.setTime(day.getTime()-24*60*60*1000);
-        let s1 = day.getFullYear()+"-" + (day.getMonth()+1) + "-" + day.getDate();
-        return s1;
-      },
+      setYesterday () {
+        let day = new Date()
+        day.setTime(day.getTime() - 24 * 60 * 60 * 1000)
+        let s1 = day.getFullYear() + '-' + (day.getMonth() + 1) + '-' + day.getDate()
+        return s1
+      }
     },
     components: {
       Group,
@@ -111,42 +139,31 @@
       CheckerItem,
       XButton,
       PopupRadio
-    },
+    }
   }
 </script>
 
 <style lang="less">
   #car-uw-check-task {
-    .weui-cell p label{
-        font-size: 14px;
-    }
-    .vux-x-input.weui-cell {
+
+    .weui-cells {
+      color: #333333;
       font-size: 14px;
+    }
+
+    .weui-cell {
       height: 25px;
     }
 
     .vux-cell-box {
-      font-size: 14px;
       height: 45px;
-    }
-
-    .vux-cell-box.weui-cell {
       padding: 0;
 
-      .vux-x-input.weui-cell {
+      .vux-x-input {
 
         label.weui-label {
           padding-right: 5px;
         }
-      }
-    }
-
-    .vux-datetime.weui-cell {
-      height: 25px;
-
-      p {
-        color: #333333;
-        font-size: 14px;
       }
     }
 
@@ -173,25 +190,46 @@
       }
 
       .task-default {
-        border-color: #ececec;
+        border-color: #c8c8cd;
         color: #999999;
       }
       .task-selected {
-        border-color: #c20000;
-        color: #c20000;
+        border-color: #d42319;
+        color: #d42319;
       }
     }
 
-
-
     .weui-btn {
       color: white;
-      background-color: #c20000;
+      background-color: #d42319;
       font-size: 16px;
       height: 45px;
       width: 80%;
       position: relative;
       top: 20px;
+    }
+  }
+
+  .vux-popup-dialog {
+    font-size: 14px;
+  }
+
+  .dp-container {
+    font-size: 14px;
+
+    .dp-header {
+
+      .dp-item {
+        font-size: 14px;
+      }
+
+      .dp-item.vux-datetime-cancel {
+        color: #d42319;
+      }
+
+      .dp-item.vux-datetime-clear {
+        color: #00a4ff;
+      }
     }
   }
 </style>

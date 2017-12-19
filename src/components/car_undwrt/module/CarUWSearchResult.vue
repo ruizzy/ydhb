@@ -2,8 +2,19 @@
   <div id="car-uw-search-result">
     <scroller lock-x
               scrollbarY
-              use-pullup :pullup-config="pullopt" @on-pullup-loading="loadMore" ref="scroller">
-      <div v-show="noData" class="xs-plugin-pullup-container xs-plugin-pullup-undefined xs-plugin-pullup-up gl-nodata">查询不到更多的记录</div>
+              use-pullup
+              height="-64"
+              :pullup-config="pullUpConfig"
+              @on-pullup-loading="loadMoreData">
+    <group gutter="0">
+      <cell-form-preview
+        v-for="(list, index) in data"
+        :key="index"
+        :list="list"
+        :border-intent="false"
+        @click.native="goTaskHandle">
+      </cell-form-preview>
+    </group>
     </scroller>
   </div>
 </template>
@@ -12,7 +23,7 @@
   import {
     Scroller,
     Group,
-    Cell } from 'vux'
+    CellFormPreview } from 'vux'
   import {
     taskQuery,
     taskHandle } from 'business'
@@ -22,37 +33,60 @@
     components: {
       Scroller,
       Group,
-      Cell
+      CellFormPreview
     },
     data () {
       return {
-        noData: false,
-        height:'500px',
-        labels: {
-          text_a: '业务号',
-          text_b: '投保人',
-          text_c: '处理级别',
-        },
-        pullopt: {
+        noMoreData: false,
+        pullUpConfig: {
           content: '上拉加载更多',
           pullUpHeight: 60,
           height: 50,
           autoRefresh: false,
           downContent: '松开加载更多',
           upContent: '上拉加载更多',
-          loadingContent: '载入中',
+          loadingContent: '载入中...',
           clsPrefix: 'xs-plugin-pullup-'
         },
 
         pagination: taskQuery.req.pagination,
-        list: []
+        data: [
+          [
+            {
+              label: '业务号',
+              value: '0029902081220170001215'
+            },
+            {
+              label: '投保人',
+              value: '测试人员'
+            },
+            {
+              label: '处理级别',
+              value: '一级核保'
+            }
+          ],
+          [
+            {
+              label: '业务号',
+              value: '0029902081220170001216'
+            },
+            {
+              label: '投保人',
+              value: '测试人员'
+            },
+            {
+              label: '处理级别',
+              value: '一级核保'
+            }
+          ]
+        ]
       }
     },
     created () {
       this.$store.commit('UPDATE_NAVIGATION_TITLE', {
         navigationTitle: '查询结果'
       })
-      this.loadMore()
+      this.loadMoreData()
       this.pagination = null
     },
     methods: {
@@ -60,7 +94,7 @@
         this.$route.params.isProcess === 'true' && (this.labels.text_b = '处理人',this.labels.text_c = '撤回');
         this.list = this.list.concat(datas)
       },
-      loadMore () {
+      loadMoreData () {
         taskQuery.refreshPagination(this.pagination)
         setTimeout(() => {
           carService.undwrtTaskQuery(taskQuery.req).then(res => {
@@ -99,4 +133,37 @@
 </script>
 
 <style lang="less">
+  #car-uw-search-result {
+
+    .vux-cell-form-preview  {
+
+      .weui-form-preview__bd {
+        font-size: 14px;
+        text-align: left;
+
+        .weui-form-preview__label {
+          margin-right: 10px;
+        }
+
+        .weui-form-preview__value {
+          color: #333333;
+        }
+      }
+
+      :after {
+        content: "";
+        display: inline-block;
+        height: 6px;
+        width: 6px;
+        border-width: 2px 2px 0 0;
+        border-color: #c8c8cd;
+        border-style: solid;
+        transform: matrix(0.71, 0.71, -0.71, 0.71, 0, 0);
+        position: absolute;
+        top: 50%;
+        margin-top: -4px;
+        right: 17px;
+      }
+    }
+  }
 </style>

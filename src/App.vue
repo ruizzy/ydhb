@@ -9,13 +9,13 @@
       <router-view></router-view>
     </transition>
     <transition name="fade">
-      <tabbar v-show="barOPT.show">
-        <tabbar-item :link="'/home'" selected>
+      <tabbar v-show="tabBarOpt.show">
+        <tabbar-item :link="'/home'" selected @on-item-click="selectTabBar('0')">
           <img slot="icon" src= "./assets/img/home-default.png"/>
           <img slot="icon-active" src= "./assets/img/home-selected.png"/>
           <span slot="label">首页</span>
         </tabbar-item>
-        <tabbar-item :link="'/user'">
+        <tabbar-item :link="'/user'" @on-item-click="selectTabBar('1')">
           <img slot="icon" src="./assets/img/account-default.png"/>
           <img slot="icon-active" src="./assets/img/account-selected.png"/>
           <span slot="label">个人</span>
@@ -91,6 +91,12 @@
     },
 
     methods: {
+      selectTabBar (index) {
+        this.$store.commit('UPDATE_TABBAR_OPT', {
+          show: true,
+          selected: index
+        })
+      }
     },
 
     computed: {
@@ -112,11 +118,8 @@
       toastOPT () {
         return this.$store.state.toastOPT
       },
-      barOPT () {
-        return this.$store.state.barOPT
-      },
-      tabIndex () {
-        return this.$store.state.tabIndex
+      tabBarOpt () {
+        return this.$store.state.tabBarOpt
       },
       prompt () {
         return this.$store.state.prompt

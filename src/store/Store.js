@@ -32,11 +32,10 @@ const state = {
     width: '',
     msg: ''
   },
-  barOPT: {
+  tabBarOpt: {
     show: true,
     selected: '0'
   },
-  tabIndex: '0',
   prompt: {
     show: false,
     msg: '',
@@ -78,14 +77,11 @@ const mutations = {
   UPDATE_EQ (state, obj) {
     state.eq = obj.eq
   },
-  UPDATE_BAROPT (state, obj) {
-    state.barOPT = {
-      show: obj.show !== undefined ? obj.show : true,
-      selected: obj.selected || '0'
+  UPDATE_TABBAR_OPT (state, obj) {
+    state.tabBarOpt = {
+      show: obj.show,
+      selected: obj.selected
     }
-  },
-  UPDATE_TABINDEX (state, tabIndex) {
-    state.tabIndex = tabIndex
   },
   UPDATE_PROMPT (state, prompt) {
     state.prompt = {

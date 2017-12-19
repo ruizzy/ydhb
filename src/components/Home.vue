@@ -68,6 +68,11 @@
       this.$store.commit('UPDATE_SHOW_NAVIGATIONBAR', {
         showNavigationBar: false
       })
+
+      this.$store.commit('UPDATE_TABBAR_OPT', {
+        show: true,
+        selected: '0'
+      })
     },
     methods: {
       selectMenu (menu) {
@@ -85,6 +90,11 @@
 
         this.$store.commit('UPDATE_NAVIGATION_TITLE', {
           navigationTitle: menu.label
+        })
+
+        this.$store.commit('UPDATE_TABBAR_OPT', {
+          show: false,
+          selected: '0'
         })
       }
     }
@@ -123,15 +133,12 @@
 
         margin: 5px;
         padding: 5px;
+        color: #333333;
+        font-size: 14px;
 
         .weui-grid__icon {
           height: 75px;
           width: 75px;
-        }
-
-        .weui-grid__label {
-          color: #333333;
-          font-size: 14px;
         }
       }
     }
