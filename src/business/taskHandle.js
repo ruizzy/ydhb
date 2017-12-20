@@ -51,6 +51,8 @@ taskHandle.res = {
     submitPassAudit: '',
     //提交上级
     submitSuperior: '',
+    //提交上级预操作
+    prepareSubmitSuperior: '',
 }
 // ================================ methods ============================
 /**

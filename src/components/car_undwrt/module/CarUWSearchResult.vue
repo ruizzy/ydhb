@@ -5,16 +5,21 @@
               use-pullup
               height="-64"
               :pullup-config="pullUpConfig"
-              @on-pullup-loading="loadMoreData">
-    <group gutter="0">
-      <cell-form-preview
-        v-for="(list, index) in data"
-        :key="index"
-        :list="list"
-        :border-intent="false"
-        @click.native="goTaskHandle">
-      </cell-form-preview>
-    </group>
+              @on-pullup-loading="loadMoreData" ref="scroller">
+      <group gutter="0">
+        <div class="weui-cell vux-cell-form-preview" :class="{'vux-cell-no-border-intent': !borderIntent}" v-for="(list, index) in data">
+          <div class="weui-form-preview__bd" @click="goTaskHandle(list)">
+            <div class="weui-form-preview__item" >
+              <label class="weui-form-preview__label" v-html="labels.text_a"></label>
+              <span class="weui-form-preview__value" v-html="list.businessNo"></span>
+              <label class="weui-form-preview__label" v-html="labels.text_b"></label>
+              <span class="weui-form-preview__value" v-html="list.appliName"></span>
+              <label class="weui-form-preview__label" v-html="labels.text_c"></label>
+              <span class="weui-form-preview__value" v-html="list.firstTrial"></span>
+            </div>
+          </div>
+        </div>
+      </group>
     </scroller>
   </div>
 </template>
@@ -38,6 +43,7 @@
     data () {
       return {
         noMoreData: false,
+        borderIntent: false,
         pullUpConfig: {
           content: '上拉加载更多',
           pullUpHeight: 60,
@@ -48,38 +54,13 @@
           loadingContent: '载入中...',
           clsPrefix: 'xs-plugin-pullup-'
         },
-
         pagination: taskQuery.req.pagination,
-        data: [
-          [
-            {
-              label: '业务号',
-              value: '0029902081220170001215'
-            },
-            {
-              label: '投保人',
-              value: '测试人员'
-            },
-            {
-              label: '处理级别',
-              value: '一级核保'
-            }
-          ],
-          [
-            {
-              label: '业务号',
-              value: '0029902081220170001216'
-            },
-            {
-              label: '投保人',
-              value: '测试人员'
-            },
-            {
-              label: '处理级别',
-              value: '一级核保'
-            }
-          ]
-        ]
+        data: [],
+        labels:{
+          text_a: '业务号',
+          text_b: '处理人',
+          text_c: '处理级别'
+        },
       }
     },
     created () {
@@ -92,7 +73,7 @@
     methods: {
       initList(datas) {
         this.$route.params.isProcess === 'true' && (this.labels.text_b = '处理人',this.labels.text_c = '撤回');
-        this.list = this.list.concat(datas)
+        this.data = this.data.concat(datas)
       },
       loadMoreData () {
         taskQuery.refreshPagination(this.pagination)
@@ -119,8 +100,8 @@
           })
         }, 500)
       },
-      goTaskHandle (bodys) {
-        taskHandle.req.gwWfLogDto = bodys
+      goTaskHandle (list) {
+        taskHandle.req.gwWfLogDto = list
         this.$route.params.isProcess === 'true' ? (taskHandle.req.viewInd = '0') : (taskHandle.req.viewInd = '1')
         this.$router.push({
           path: '/CarUWTaskHandle'
@@ -133,6 +114,13 @@
 </script>
 
 <style lang="less">
+@import '../../../styles/weui/widget/weui_cell/weui_cell_global';
+@import '../../../styles/weui/widget/weui_cell/weui_form/weui-form-preview.less';
+
+.vux-cell-form-preview .weui-form-preview__bd {
+  width: 100%;
+  padding: 0;
+}
   #car-uw-search-result {
 
     .vux-cell-form-preview  {

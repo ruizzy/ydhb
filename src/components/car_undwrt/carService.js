@@ -37,6 +37,10 @@ carService.submitJunior = params => {
 carService.submitSuperior = params => {
     return Vue.http.post('/car/submitSuperior', params);
 };
+//提交上级审核预操作
+carService.prepareSubmitSuperior = params => {
+    return Vue.http.post('/car/prepareSubmitSuperior', params);
+};
 //查看历次审核意见
 carService.commonViewTrace = params => {
     return Vue.http.post('/car/commonViewTrace', params);
