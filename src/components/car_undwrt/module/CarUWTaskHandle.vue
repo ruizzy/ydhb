@@ -5,83 +5,203 @@
       <button-tab-item @on-item-click="selectItem()">人工审核原因</button-tab-item>
       <button-tab-item @on-item-click="selectItem()">影像附件</button-tab-item>
     </button-tab>
-    <div class="policy-info-group" v-show="showPolicyInfo">
-      <group gutter="0" class="info-group basic">
-        <cell is-link
-              title="基本信息"
-              :border-intent="false"
-              :arrow-direction="showBasicInfo ? 'up': 'down'"
-              @click.native="showBasicInfo = !showBasicInfo">
-        </cell>
-        <cell-form-preview v-show="showBasicInfo"
-                           :list="basicInfo"
-                           :border-intent="false">
-        </cell-form-preview>
-      </group>
-      <card class="button-card basic" v-show="showBasicInfo">
-        <x-button mini plain slot="content" text="精友信息"
-                  class="has-right-border">
-        </x-button>
-        <x-button mini plain slot="content" text="精友预算"
-                  class="has-right-border">
-        </x-button>
-        <x-button mini plain slot="content" text="纯风险保费">
-        </x-button>
-      </card>
+    <scroller lock-x scrollbarY height="-154">
+      <div class="policy-info-group" v-show="showPolicyInfo">
+        <group gutter="0" class="info-group basic">
+          <cell is-link
+                class="title"
+                title="基本信息"
+                :border-intent="false"
+                :arrow-direction="showBasicInfo ? 'up': 'down'"
+                @click.native="showBasicInfo = !showBasicInfo">
+          </cell>
+          <cell-form-preview v-show="showBasicInfo"
+                             :list="basicInfo"
+                             :border-intent="false">
+          </cell-form-preview>
+        </group>
+        <card class="button-card basic" v-show="showBasicInfo">
+          <x-button mini plain slot="content" text="精友信息"
+                    class="has-right-border">
+          </x-button>
+          <x-button mini plain slot="content" text="精友预算"
+                    class="has-right-border">
+          </x-button>
+          <x-button mini plain slot="content" text="纯风险保费">
+          </x-button>
+        </card>
 
-      <group gutter="0" class="info-group TCI">
-        <cell is-link
-              title="交强险"
-              :border-intent="false"
-              :arrow-direction="showTCIInfo ? 'up': 'down'"
-              @click.native="showTCIInfo = !showTCIInfo">
-        </cell>
-        <cell-form-preview v-show="showTCIInfo"
-                           :list="TCIInfo"
-                           :border-intent="false">
-        </cell-form-preview>
-      </group>
-      <card class="button-card" v-show="showTCIInfo">
-        <x-button mini plain slot="content" text="平台信息">
-        </x-button>
-      </card>
+        <group gutter="0" class="info-group TCI">
+          <cell is-link
+                class="title"
+                title="交强险"
+                :border-intent="false"
+                :arrow-direction="showTCIInfo ? 'up': 'down'"
+                @click.native="showTCIInfo = !showTCIInfo">
+          </cell>
+          <cell-form-preview v-show="showTCIInfo"
+                             :list="TCIInfo"
+                             :border-intent="false">
+          </cell-form-preview>
+        </group>
+        <card class="button-card" v-show="showTCIInfo">
+          <x-button mini plain slot="content" text="平台信息">
+          </x-button>
+        </card>
 
-      <group gutter="0" class="info-group VCI">
-        <cell is-link
-              title="商业险"
-              :border-intent="false"
-              :arrow-direction="showVCIInfo ? 'up': 'down'"
-              @click.native="showVCIInfo = !showVCIInfo">
-        </cell>
-        <cell-form-preview v-show="showVCIInfo"
-                           :list="VCIInfo"
-                           :border-intent="false">
-        </cell-form-preview>
-      </group>
-      <card class="button-card" v-show="showVCIInfo">
-        <x-button mini plain slot="content" text="平台信息">
-        </x-button>
-      </card>
+        <group gutter="0" class="info-group VCI">
+          <cell is-link
+                class="title"
+                title="商业险"
+                :border-intent="false"
+                :arrow-direction="showVCIInfo ? 'up': 'down'"
+                @click.native="showVCIInfo = !showVCIInfo">
+          </cell>
+          <cell-form-preview v-show="showVCIInfo&&VCIInfo.list.length"
+                             :list="VCIInfo.list"
+                             :border-intent="false">
+          </cell-form-preview>
+          <div class="info-table" v-show="showVCIInfo&&VCIInfo.insuranceArr.length">
+            <x-table full-bordered>
+              <thead>
+              <tr>
+                <th>承保险别</th>
+                <th>保额(元)</th>
+                <th>保费(元)</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr v-for="(item, index) in VCIInfo.insuranceArr" :key="index">
+                <td>{{item.insurance}}</td>
+                <td class="orange">{{item.coverage}}</td>
+                <td class="red">{{item.premium}}</td>
+              </tr>
+              </tbody>
+            </x-table>
+          </div>
+        </group>
+        <card class="button-card" v-show="showVCIInfo">
+          <x-button mini plain slot="content" text="平台信息">
+          </x-button>
+        </card>
 
-      <group gutter="0" class="info-group special-agreement">
-        <cell is-link
-              title="特别约定"
-              :border-intent="false"
-              :arrow-direction="showSpecialAgreement ? 'up': 'down'"
-              @click.native="showSpecialAgreement = !showSpecialAgreement">
-        </cell>
-      </group>
+        <group gutter="0" class="info-group special-agreement">
+          <cell is-link
+                class="title"
+                title="特别约定"
+                :border-intent="false"
+                :arrow-direction="showSpecialAgreement ? 'up': 'down'"
+                @click.native="showSpecialAgreement = !showSpecialAgreement">
+          </cell>
+          <group class="title" title="交强险" v-show="showSpecialAgreement && specialAgreementInfo.TCI.length">
+            <cell value-align="left"
+                  v-for="(item, index) in specialAgreementInfo.TCI"
+                  :key="index"
+                  :title="index+1"
+                  :value="item">
+            </cell>
+          </group>
+          <group class="title" title="商业险" v-show="showSpecialAgreement && specialAgreementInfo.VCI.length">
+            <cell value-align="left"
+                  v-for="(item, index) in specialAgreementInfo.VCI"
+                  :key="index"
+                  :title="index+1"
+                  :value="item">
+            </cell>
+          </group>
+        </group>
 
-      <group gutter="0" class="info-group sell-info">
-        <cell is-link
-              title="销售信息"
-              :border-intent="false"
-              :arrow-direction="showSellInfo ? 'up': 'down'"
-              @click.native="showSellInfo = !showSellInfo">
-        </cell>
-      </group>
+        <group gutter="0" class="info-group sell-info">
+          <cell is-link
+                class="title"
+                title="销售信息"
+                :border-intent="false"
+                :arrow-direction="showSellInfo ? 'up': 'down'"
+                @click.native="showSellInfo = !showSellInfo">
+          </cell>
+          <cell-form-preview v-show="showSellInfo&&sellInfo.list.length"
+                             :list="sellInfo.list"
+                             :border-intent="false">
+          </cell-form-preview>
+          <group class="title" title="交强险" v-show="showSellInfo&&sellInfo.TCIArr.length">
+            <div class="info-table">
+              <x-table full-bordered>
+                <thead>
+                <tr>
+                  <th>费用项目</th>
+                  <th>预设值(元)</th>
+                  <th>调整值(元)</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(item, index) in sellInfo.TCIArr" :key="index">
+                  <td>{{item.expenseItem}}</td>
+                  <td class="orange">{{item.defaultValue}}</td>
+                  <td class="red">{{item.adjustedValue}}</td>
+                </tr>
+                </tbody>
+              </x-table>
+            </div>
+          </group>
+          <group class="title" title="商业险" v-show="showSellInfo&&sellInfo.VCIArr.length">
+            <div class="info-table">
+              <x-table full-bordered>
+                <thead>
+                <tr>
+                  <th>费用项目</th>
+                  <th>预设值(元)</th>
+                  <th>调整值(元)</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(item, index) in sellInfo.VCIArr" :key="index">
+                  <td>{{item.expenseItem}}</td>
+                  <td class="orange">{{item.defaultValue}}</td>
+                  <td class="red">{{item.adjustedValue}}</td>
+                </tr>
+                </tbody>
+              </x-table>
+            </div>
+          </group>
+        </group>
+      </div>
 
-    </div>
+      <div class="manual-review-reason-group" v-show="showManualReviewReason">
+        <div class="info-table no-cell-border" >
+          <x-table :cell-bordered="false">
+            <thead>
+            <tr>
+              <th>规则名称</th>
+              <th>规则违反信息描述</th>
+              <th>附加信息</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="(item, index) in manualReviewReasons" :key="index">
+              <td>{{item.ruleName}}</td>
+              <td>{{item.description}}</td>
+              <td>{{item.extraMessage}}</td>
+            </tr>
+            </tbody>
+          </x-table>
+        </div>
+      </div>
+
+      <div class="image-attachments-group" v-show="showImageAttachments">
+
+      </div>
+    </scroller>
+
+    <card class="button-card operation">
+      <x-button mini plain slot="content" text="审核通过"
+                class="has-right-border">
+      </x-button>
+      <x-button mini plain slot="content" text="下发修改"
+                class="has-right-border">
+      </x-button>
+      <x-button mini plain slot="content" text="提交上级">
+      </x-button>
+    </card>
   </div>
 </template>
 
@@ -93,6 +213,8 @@ import {
   Cell,
   CellFormPreview,
   Group,
+  Scroller,
+  XTable,
   XButton} from 'vux'
 import {taskHandle} from 'business'
 import carService from '../carService'
@@ -104,6 +226,8 @@ export default {
     Cell,
     CellFormPreview,
     Group,
+    Scroller,
+    XTable,
     XButton
   },
   data () {
@@ -127,14 +251,73 @@ export default {
         }
       ],
       showVCIInfo: false,
-      VCIInfo: [
-        {
-          label: '起终保日期',
-          value: '2017-05-06'
-        }
-      ],
+      VCIInfo: {
+        list: [
+          {
+            label: '起终保日期',
+            value: '2017-05-06'
+          }
+        ],
+        insuranceArr: [
+          {
+            insurance: '商业险',
+            coverage: '30000',
+            premium: '30000'
+          }
+        ]
+      },
       showSpecialAgreement: false,
-      showSellInfo: false
+      specialAgreementInfo: {
+        TCI: [
+          '交强险',
+          '交强险',
+          '交强险'
+        ],
+        VCI: [
+          '商业险',
+          '商业险',
+          '商业险'
+        ]
+      },
+      showSellInfo: false,
+      sellInfo: {
+        list: [
+          {
+            label: '协议号',
+            value: '201705066536782'
+          }
+        ],
+        TCIArr: [
+          {
+            expenseItem: '手续费',
+            defaultValue: '30000',
+            adjustedValue: '30000'
+          },
+          {
+            expenseItem: '客户关怀',
+            defaultValue: '30000',
+            adjustedValue: '30000'
+          }
+        ],
+        VCIArr: [
+          {
+            expenseItem: '手续费',
+            defaultValue: '30000',
+            adjustedValue: '30000'
+          }
+        ]
+      },
+      manualReviewReasons: [
+        {
+          ruleName: '批单核保',
+          description: '该批单需人工核保',
+          extraMessage: '无'
+        }, {
+          ruleName: '批改项目',
+          description: '批改投保人信息',
+          extraMessage: '无'
+        }
+      ]
     }
   },
   created () {
@@ -207,7 +390,7 @@ export default {
         handleText: '意见很大',
         flowId: taskHandle.res.gwWfLogDto.flowId,
         logNo: taskHandle.res.gwWfLogDto.logNo,
-        businessNo: taskHandle.res.gwWfLogDto.businessNo,
+        businessNo: taskHandle.res.gwWfLogDto.businessNo
       }
       carService.submitPassAudit(params).then(res => {
         Object.assign(taskHandle.res, {submitPassAudit: res.data.datas})
@@ -282,7 +465,7 @@ export default {
     commonViewTrace () {
       let params = {
         businessNo: taskHandle.res.gwWfLogDto.businessNo,
-        businessType: taskHandle.res.gwWfLogDto.businessType,
+        businessType: taskHandle.res.gwWfLogDto.businessType
       }
       carService.commonViewTrace(params).then(res => {
         Object.assign(taskHandle.res, {commonViewTrace: res.data.datas})
@@ -335,89 +518,191 @@ export default {
     .policy-info-group {
       background-color: #f5f5f5;
       padding:10px;
+      overflow-x: hidden;
+      overflow-y: scroll;
+      -webkit-overflow-scrolling : touch;
 
       .info-group {
         background-color: #f5f5f5;
         margin-top: 10px;
-
-        .weui-cells::before {
-          display: none;
-        }
-
-        .weui-cells {
-
-          .weui-cell {
-            font-size: 14px;
-            color: #d42319;
-          }
-        }
-
-        .weui-cells::after {
-          display: none;
-        }
-
-        .vux-cell-form-preview::before {
-          margin: 0 15px;
-        }
-
-        .vux-cell-form-preview {
-
-          .weui-form-preview__bd {
-            font-size: 14px;
-            text-align: left;
-
-
-            .weui-form-preview__label {
-              margin-right: 10px;
-            }
-
-            .weui-form-preview__value {
-              color: #333333;
-            }
-          }
-        }
       }
 
       .info-group.basic {
         margin-top: 0;
       }
 
-      .button-card::before {
-        margin: 0 15px;
+    }
+
+    //weui-cells style
+    .weui-cells::before {
+      display: none;
+    }
+
+    .weui-cells__title {
+      font-size: 14px;
+      color: #d42319;
+    }
+    .weui-cells {
+
+      .weui-cell {
+        font-size: 14px;
+        color: #333333;
       }
 
-      .button-card {
-        margin: 0;
+      .weui-cell.title {
+        font-size: 14px;
+        color: #d42319;
+      }
+    }
 
-        .vux-card-content {
-          height: 40px;
-          text-align: center;
+    .weui-cells::after {
+      display: none;
+    }
 
-          .weui-btn {
-            color: #00a4ff;
-            border-width: 0;
-            height: 20px;
-            line-height: 20px;
-            margin: 10px 0;
-          }
+    .title .weui-cells__title {
+      font-size: 13px;
+    }
 
-          .weui-btn.has-right-border::after {
-            border-right: 1px solid #d9d9d9;
-            border-radius: 0;
-          }
+    .title .weui-cell{
+      font-size: 13px;
+
+      .vux-cell-bd {
+        margin-right: 10px;
+        color: #999999;
+      }
+
+      .weui-cell__ft {
+        color: #333333;
+      }
+    }
+
+    //cell-form-preview style
+    .vux-cell-form-preview::before {
+      margin: 0 15px;
+    }
+
+    .vux-cell-form-preview {
+
+      .weui-form-preview__bd {
+        font-size: 14px;
+        text-align: left;
+
+
+        .weui-form-preview__label {
+          margin-right: 10px;
         }
-      }
 
-      .button-card::after {
-        display: none;
-      }
-
-      .button-card.basic {
-
-        .weui-btn {
-          width: 33%;
+        .weui-form-preview__value {
+          color: #333333;
         }
       }
     }
+
+    // button-card style
+    .button-card::before {
+      margin: 0 15px;
+    }
+
+    .button-card {
+      margin: 0;
+      height: 40px;
+      text-align: center;
+
+      .vux-card-content {
+
+        .weui-btn {
+          color: #00a4ff;
+          border-width: 0;
+          height: 20px;
+          line-height: 20px;
+          margin: 10px 0;
+        }
+
+        .weui-btn.has-right-border::after {
+          border-right: 1px solid #d9d9d9;
+          border-radius: 0;
+        }
+      }
+    }
+
+    .button-card::after {
+      display: none;
+    }
+
+    .button-card.basic {
+
+      .weui-btn {
+        width: 33.028%;
+      }
+    }
+
+    .button-card.operation::before {
+      margin: 0;
+    }
+
+    .button-card.operation {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      right: 0;
+
+      .weui-btn {
+        width: 32.333%;
+      }
+    }
+
+    .info-table {
+      color: #333333;
+      background-color: #f5f5f5;
+      font-size: 14px;
+      font-weight: 400;
+      margin: 0 15px 10px 15px;
+
+      td.orange {
+        color: #ff5b00;
+      }
+
+      td.red {
+        color: #d42319;
+      }
+
+      .vux-table:before {
+        border-left-color: #d9d9d9;
+      }
+
+      .vux-table:after {
+        border-top-color: #d9d9d9;
+      }
+
+      .vux-table td:before, .vux-table th:before {
+        border-bottom-color: #d9d9d9;
+      }
+
+      .vux-table td:after, .vux-table th:after {
+        border-right-color: #d9d9d9;
+      }
+    }
+
+    .info-table.no-cell-border {
+      margin: 0;
+      border-color: white;
+
+      .vux-table:before {
+        border-left-color: white;
+      }
+
+      .vux-table:after {
+        border-top-color: white;
+      }
+
+      .vux-table td:before, .vux-table th:before {
+        border-bottom-color: white;
+      }
+
+      .vux-table td:after, .vux-table th:after {
+        border-right-color: white;
+      }
+    }
+
   }
 </style>
