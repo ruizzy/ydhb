@@ -6,8 +6,7 @@
             :key="menu.id"
             :title="menu.title"
             :is-link="true"
-            :link="menu.link"
-            @click.native="selectMenu(menu.title)">
+            :link="menu.link">
       </cell>
     </group>
   </div>
@@ -40,12 +39,12 @@
         ]
       }
     },
+    created () {
+      this.$store.commit('UPDATE_NAVIGATION_TITLE', {
+        navigationTitle: '车险核保'
+      })
+    },
     methods: {
-      selectMenu (title) {
-        this.$store.commit('UPDATE_NAVIGATION_TITLE', {
-          navigationTitle: title
-        })
-      }
     }
 }
 </script>

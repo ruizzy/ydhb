@@ -51,7 +51,7 @@
       </checker>
     </group>
     <x-button text="查询"
-              :link="'/carUWSearchResult/false'"
+              :link="'/carUWSearchResult/check'"
               @click.native="searchBtnClicked">
     </x-button>
   </div>
@@ -69,7 +69,6 @@
     XButton,
     PopupRadio
   } from 'vux'
-  import carService from '../carService'
   import {taskQuery} from 'business'
   export default {
     name: 'car-uw-check-task',
@@ -97,6 +96,9 @@
     },
 
     created () {
+      this.$store.commit('UPDATE_NAVIGATION_TITLE', {
+        navigationTitle: '任务查看'
+      })
       this.initDate()
     },
     methods: {
@@ -108,14 +110,14 @@
       },
       initDate (type) {
         let now = new Date()
-        let cmonth = now.getMonth() + 1
+        let month = now.getMonth() + 1
         let day = now.getDate()
-        if (cmonth < 10) cmonth = '0' + cmonth
+        if (month < 10) month = '0' + month
         if (day < 10) day = '0' + day
-        let today = now.getFullYear() + '-' + cmonth + '-' + day
-        if (type === '0'){
+        let today = now.getFullYear() + '-' + month + '-' + day
+        if (type === '0') {
           this.form.gwWfLogDto.flowInTime_ForQueryStart = today
-        } else if (type === '1'){
+        } else if (type === '1') {
           this.form.gwWfLogDto.flowInTime_ForQueryEnd = today
         } else {
           this.form.gwWfLogDto.flowInTime_ForQueryStart = this.setYesterday()

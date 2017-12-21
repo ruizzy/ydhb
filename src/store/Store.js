@@ -62,8 +62,8 @@ const mutations = {
   UPDATE_SHOW_NAVIGATIONBAR (state, obj) {
     state.showNavigationBar = obj.showNavigationBar
   },
-  LOADING (state, ifShow) {
-    state.showLoading = ifShow
+  UPDATE_SHOW_LOADING (state, obj) {
+    state.showLoading = obj.showLoading
   },
   UPDATE_TOAST (state, toastOPT) {
     state.toastOPT = {

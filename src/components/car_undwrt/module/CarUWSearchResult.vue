@@ -5,20 +5,17 @@
               use-pullup
               height="-64"
               :pullup-config="pullUpConfig"
-              @on-pullup-loading="loadMoreData" ref="scroller">
+              v-show="resultList.length"
+              @on-pullup-loading="loadMoreData"
+              ref="scroller">
       <group gutter="0">
-        <div class="weui-cell vux-cell-form-preview" :class="{'vux-cell-no-border-intent': !borderIntent}" v-for="(list, index) in data">
-          <div class="weui-form-preview__bd" @click="goTaskHandle(list)">
-            <div class="weui-form-preview__item" >
-              <label class="weui-form-preview__label" v-html="labels.text_a"></label>
-              <span class="weui-form-preview__value" v-html="list.businessNo"></span>
-              <label class="weui-form-preview__label" v-html="labels.text_b"></label>
-              <span class="weui-form-preview__value" v-html="list.appliName"></span>
-              <label class="weui-form-preview__label" v-html="labels.text_c"></label>
-              <span class="weui-form-preview__value" v-html="list.firstTrial"></span>
-            </div>
-          </div>
-        </div>
+        <cell-form-preview
+          v-for="(result, index) in resultList"
+          :key="index"
+          :list="processResult(result)"
+          :border-intent="false"
+          @click.native="goTaskHandle(result)">
+        </cell-form-preview>
       </group>
     </scroller>
   </div>
@@ -42,25 +39,21 @@
     },
     data () {
       return {
+        isProcess: (this.$route.params.isProcess === 'process'),
         noMoreData: false,
         borderIntent: false,
         pullUpConfig: {
           content: '上拉加载更多',
-          pullUpHeight: 60,
-          height: 50,
+          pullUpHeight: 0,
+          height: 25,
           autoRefresh: false,
           downContent: '松开加载更多',
           upContent: '上拉加载更多',
-          loadingContent: '载入中...',
+          loadingContent: '数据加载中',
           clsPrefix: 'xs-plugin-pullup-'
         },
         pagination: taskQuery.req.pagination,
-        data: [],
-        labels:{
-          text_a: '业务号',
-          text_b: '处理人',
-          text_c: '处理级别'
-        },
+        resultList: []
       }
     },
     created () {
@@ -71,38 +64,67 @@
       this.pagination = null
     },
     methods: {
-      initList(datas) {
-        this.$route.params.isProcess === 'true' && (this.labels.text_b = '处理人',this.labels.text_c = '撤回');
-        this.data = this.data.concat(datas)
+      processResult (result) {
+        return [
+          {
+            label: '业务号',
+            value: result.businessNo
+          }, {
+            label: this.isProcess ? '投保人' : '处理人',
+            value: this.isProcess ? result.appliName : result.appliName
+          }, {
+            label: this.isProcess ? '处理级别' : '撤回',
+            value: this.isProcess ? result.firstTrial : result.firstTrial
+          }
+        ]
       },
       loadMoreData () {
+        this.$store.commit('UPDATE_SHOW_LOADING', {
+          showLoading: true
+        })
         taskQuery.refreshPagination(this.pagination)
         setTimeout(() => {
           carService.undwrtTaskQuery(taskQuery.req).then(res => {
+            this.$store.commit('UPDATE_SHOW_LOADING', {
+              showLoading: false
+            })
             taskQuery.res.gwWfLogDtoList = res.data.datas.gwWfLogDtoList
             let pageSize = taskQuery.req.pagination.rowsPerPage
-            let len = taskQuery.res.gwWfLogDtoList.length;
-            (len < pageSize) && (this.$refs.scroller.disablePullup(), this.noData = true);
-            (len == pageSize && this.noData) && (this.$refs.scroller.enablePullup(), this.noData = false)
-            this.initList(taskQuery.res.gwWfLogDtoList)
+            let len = taskQuery.res.gwWfLogDtoList.length
+            if (len < pageSize) {
+              this.$refs.scroller.disablePullup()
+              this.noData = true
+            }
+
+            if (len === pageSize) {
+              this.$refs.scroller.enablePullup()
+              this.noData = false
+            }
+
+            this.resultList = this.resultList.concat(taskQuery.res.gwWfLogDtoList)
+
             this.$nextTick(() => {
+              this.$refs.scroller.donePullup()
+
               if (taskQuery.req.pagination.pageNo === 1) {
                 this.$refs.scroller.reset({
                   top: 0
                 })
               } else {
-                this.$refs.scroller.donePullup()
                 this.$refs.scroller.reset()
               }
             })
           }, res => {
-            console.log(res.data);
+            this.$store.commit('UPDATE_SHOW_LOADING', {
+              showLoading: false
+            })
+            console.log(res.data)
           })
         }, 500)
       },
       goTaskHandle (list) {
         taskHandle.req.gwWfLogDto = list
-        this.$route.params.isProcess === 'true' ? (taskHandle.req.viewInd = '0') : (taskHandle.req.viewInd = '1')
+        this.isProcess ? (taskHandle.req.viewInd = '0') : (taskHandle.req.viewInd = '1')
         this.$router.push({
           path: '/CarUWTaskHandle'
         })
@@ -114,13 +136,6 @@
 </script>
 
 <style lang="less">
-@import '../../../styles/weui/widget/weui_cell/weui_cell_global';
-@import '../../../styles/weui/widget/weui_cell/weui_form/weui-form-preview.less';
-
-.vux-cell-form-preview .weui-form-preview__bd {
-  width: 100%;
-  padding: 0;
-}
   #car-uw-search-result {
 
     .vux-cell-form-preview  {

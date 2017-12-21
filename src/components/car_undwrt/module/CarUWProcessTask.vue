@@ -49,7 +49,7 @@
       </datetime>
     </group>
     <x-button text="查询"
-              :link="'/carUWSearchResult/true'"
+              :link="'/carUWSearchResult/process'"
               @click.native="searchBtnClicked">
     </x-button>
   </div>
@@ -107,6 +107,9 @@
       }
     },
     created () {
+      this.$store.commit('UPDATE_NAVIGATION_TITLE', {
+        navigationTitle: '任务处理'
+      })
       this.initDate()
     },
     methods: {

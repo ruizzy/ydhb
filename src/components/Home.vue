@@ -54,6 +54,16 @@
         ]
       }
     },
+    created () {
+      this.$store.commit('UPDATE_SHOW_NAVIGATIONBAR', {
+        showNavigationBar: false
+      })
+
+      this.$store.commit('UPDATE_TABBAR_OPT', {
+        show: true,
+        selected: '0'
+      })
+    },
     mounted () {
       const width = window.innerWidth ||
         document.documentElement.clientWidth ||
@@ -64,15 +74,6 @@
         function (grid) {
           grid.style.width = ((width - 40) / 3).toString() + 'px'
         })
-
-      this.$store.commit('UPDATE_SHOW_NAVIGATIONBAR', {
-        showNavigationBar: false
-      })
-
-      this.$store.commit('UPDATE_TABBAR_OPT', {
-        show: true,
-        selected: '0'
-      })
     },
     methods: {
       selectMenu (menu) {
@@ -86,10 +87,6 @@
 
         this.$store.commit('UPDATE_SHOW_BACK', {
           showBack: true
-        })
-
-        this.$store.commit('UPDATE_NAVIGATION_TITLE', {
-          navigationTitle: menu.label
         })
 
         this.$store.commit('UPDATE_TABBAR_OPT', {

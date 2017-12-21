@@ -193,13 +193,18 @@
     </scroller>
 
     <card class="button-card operation">
-      <x-button mini plain slot="content" text="审核通过"
+      <x-button mini plain slot="content"
+                text="审核通过"
                 class="has-right-border">
       </x-button>
-      <x-button mini plain slot="content" text="下发修改"
-                class="has-right-border">
+      <x-button mini plain slot="content"
+                text="下发修改"
+                class="has-right-border"
+                :link="'/submit/junior'">
       </x-button>
-      <x-button mini plain slot="content" text="提交上级">
+      <x-button mini plain slot="content"
+                text="提交上级"
+                :link="'/submit/superior'">
       </x-button>
     </card>
   </div>
@@ -518,9 +523,6 @@ export default {
     .policy-info-group {
       background-color: #f5f5f5;
       padding:10px;
-      overflow-x: hidden;
-      overflow-y: scroll;
-      -webkit-overflow-scrolling : touch;
 
       .info-group {
         background-color: #f5f5f5;

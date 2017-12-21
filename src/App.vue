@@ -24,14 +24,13 @@
     </transition>
 
     <!-- 以下是公共组件 -->
-    <loading v-model="showLoading" text="载入中"></loading>
+    <loading v-model="showLoading" text="加载中"></loading>
     <toast v-model="toastOPT.show" type="text" :width="toastOPT.width" :class="{ 'toast-text':toastOPT.type =='text' }">
       <div slot>
         <img v-show="toastOPT.type!='text'" class="g-toast-img" :src="'./static/img/' +toastOPT.type+ '.png'"/>
         <p :class="{ 'g-toast-p':toastOPT.type!='text' }">{{toastOPT.msg}}</p>
       </div>
     </toast>
-    <!-- 样式待优化 -->
     <x-dialog v-model="prompt.show" class="g-dialog">
       <h3 class="popue-title">提示</h3>
       <div class="popue-content">
@@ -147,9 +146,13 @@
         width: 44px;
         line-height: 44px;
 
+        .left-arrow::before {
+          border-color: white;
+        }
+
         .left-arrow {
-          top: 27px;
           left: 10px;
+          top: 27px;
         }
       }
 
