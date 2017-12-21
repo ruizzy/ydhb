@@ -371,6 +371,22 @@ export default {
         console.log(res.data)
       })
     },
+    // 提交上级预操作
+    prepareSubmitSuperior () {
+      let params = {
+        handleText: '提交上级预操作',
+        businessType: taskHandle.res.gwWfLogDto.businessType,
+        businessNo: taskHandle.res.gwWfLogDto.businessNo,
+        flowId: taskHandle.res.gwWfLogDto.flowId,
+        logNo: taskHandle.res.gwWfLogDto.logNo
+      }
+      carService.prepareSubmitSuperior(params).then(res => {
+        Object.assign(taskHandle.res, {prepareSubmitSuperior: res.data.datas})
+        console.log(res.data.datas)
+      }, res => {
+        console.log(res.data)
+      })
+    },
     // 提交上级
     submitSuperior () {
       let params = {
@@ -389,6 +405,7 @@ export default {
         console.log(res.data)
       })
     },
+    // 审核通过
     submitPassAudit () {
       let params = {
         handType: '11', // 核保、核赔标志，不知道哪里取
@@ -455,9 +472,7 @@ export default {
     // 人工核保原因
     showNoAutoCheckInfo () {
       let params = {
-        gwWfLogDto: {
           businessNo: taskHandle.res.businessNo
-        }
       }
       carService.showNoAutoCheckInfo(params).then(res => {
         Object.assign(taskHandle.res, {showNoAutoCheckInfo: res.data.datas})
