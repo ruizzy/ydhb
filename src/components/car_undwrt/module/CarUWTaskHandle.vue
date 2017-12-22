@@ -58,11 +58,11 @@
                 :arrow-direction="showVCIInfo ? 'up': 'down'"
                 @click.native="showVCIInfo = !showVCIInfo">
           </cell>
-          <cell-form-preview v-show="showVCIInfo&&VCIInfo.list.length"
-                             :list="VCIInfo.list"
+          <cell-form-preview v-show="showVCIInfo&&VCIInfo.riskInfo.length"
+                             :list="VCIInfo.riskInfo"
                              :border-intent="false">
           </cell-form-preview>
-          <div class="info-table" v-show="showVCIInfo&&VCIInfo.insuranceArr.length">
+          <div class="info-table" v-show="showVCIInfo&&VCIInfo.itemKind.length">
             <x-table full-bordered>
               <thead>
               <tr>
@@ -72,10 +72,10 @@
               </tr>
               </thead>
               <tbody>
-              <tr v-for="(item, index) in VCIInfo.insuranceArr" :key="index">
-                <td>{{item.insurance}}</td>
-                <td class="orange">{{item.coverage}}</td>
-                <td class="red">{{item.premium}}</td>
+              <tr v-for="(item, index) in VCIInfo.itemKind" :key="index">
+                <td>{{item.kindName}}</td>
+                <td class="orange">{{item.sumInsured}}</td>
+                <td class="red">{{item.uwPremium}}</td>
               </tr>
               </tbody>
             </x-table>
@@ -94,17 +94,17 @@
                 :arrow-direction="showSpecialAgreement ? 'up': 'down'"
                 @click.native="showSpecialAgreement = !showSpecialAgreement">
           </cell>
-          <group class="title" title="交强险" v-show="showSpecialAgreement && specialAgreementInfo.TCI.length">
+          <group class="title" title="交强险" v-show="showSpecialAgreement && riskSpecialClauses.TCI.length">
             <cell value-align="left"
-                  v-for="(item, index) in specialAgreementInfo.TCI"
+                  v-for="(item, index) in riskSpecialClauses.TCI"
                   :key="index"
                   :title="index+1"
                   :value="item">
             </cell>
           </group>
-          <group class="title" title="商业险" v-show="showSpecialAgreement && specialAgreementInfo.VCI.length">
+          <group class="title" title="商业险" v-show="showSpecialAgreement && riskSpecialClauses.VCI.length">
             <cell value-align="left"
-                  v-for="(item, index) in specialAgreementInfo.VCI"
+                  v-for="(item, index) in riskSpecialClauses.VCI"
                   :key="index"
                   :title="index+1"
                   :value="item">
@@ -120,8 +120,8 @@
                 :arrow-direction="showSellInfo ? 'up': 'down'"
                 @click.native="showSellInfo = !showSellInfo">
           </cell>
-          <cell-form-preview v-show="showSellInfo&&sellInfo.list.length"
-                             :list="sellInfo.list"
+          <cell-form-preview v-show="showSellInfo&&sellInfo.guMain.length"
+                             :list="sellInfo.guMain"
                              :border-intent="false">
           </cell-form-preview>
           <group class="title" title="交强险" v-show="showSellInfo&&sellInfo.TCIArr.length">
@@ -294,76 +294,15 @@ export default {
       showApproveInfo: false,
       showOperationTab: taskHandle.req.viewInd === '0',
       showBasicInfo: false,
-      basicInfo: [
-        {
-          label: '车主',
-          value: '富德产险北京分公司'
-        }
-      ],
+      basicInfo: [],
       showTCIInfo: false,
-      TCIInfo: [
-        {
-          label: '起终保日期',
-          value: '2017-05-06'
-        }
-      ],
+      TCIInfo: [],
+      VCIInfo: [],
       showVCIInfo: false,
-      VCIInfo: {
-        list: [
-          {
-            label: '起终保日期',
-            value: '2017-05-06'
-          }
-        ],
-        insuranceArr: [
-          {
-            insurance: '商业险',
-            coverage: '30000',
-            premium: '30000'
-          }
-        ]
-      },
       showSpecialAgreement: false,
-      specialAgreementInfo: {
-        TCI: [
-          '交强险',
-          '交强险',
-          '交强险'
-        ],
-        VCI: [
-          '商业险',
-          '商业险',
-          '商业险'
-        ]
-      },
+      riskSpecialClauses: {},
       showSellInfo: false,
-      sellInfo: {
-        list: [
-          {
-            label: '协议号',
-            value: '201705066536782'
-          }
-        ],
-        TCIArr: [
-          {
-            expenseItem: '手续费',
-            defaultValue: '30000',
-            adjustedValue: '30000'
-          },
-          {
-            expenseItem: '客户关怀',
-            defaultValue: '30000',
-            adjustedValue: '30000'
-          }
-        ],
-        VCIArr: [
-          {
-            expenseItem: '手续费',
-            defaultValue: '30000',
-            adjustedValue: '30000'
-          }
-        ]
-      },
+      sellInfo: {},
       manualReviewReasons: [
         {
           ruleName: '批单核保',
@@ -528,7 +467,12 @@ export default {
         viewInd: taskHandle.req.viewInd || data
       }
       carService.undwrtTaskHandle(params).then(res => {
-        Object.assign(taskHandle.res, res.data.datas)
+        taskHandle.initTaskHandle(res.data.datas)
+        this.basicInfo = taskHandle.getBasicInfo()
+        this.TCIInfo = taskHandle.getTCIInfo()
+        this.VCIInfo = taskHandle.getVCIInfo()
+        this.riskSpecialClauses = taskHandle.getRiskSpecialClauses()
+        this.sellInfo = taskHandle.getSellInfo()
         console.log(res.data.datas)
       }, res => {
         console.log(res.data)
