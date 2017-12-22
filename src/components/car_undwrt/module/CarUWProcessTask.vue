@@ -154,6 +154,10 @@
 
     .weui-cell {
       height: 25px;
+
+      .vux-cell-value {
+        color: #333333;
+      }
     }
 
     .vux-cell-box {

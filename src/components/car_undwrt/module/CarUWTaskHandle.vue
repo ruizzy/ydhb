@@ -4,6 +4,7 @@
       <button-tab-item selected @on-item-click="selectItem()">保单信息</button-tab-item>
       <button-tab-item @on-item-click="selectItem()">人工审核原因</button-tab-item>
       <button-tab-item @on-item-click="selectItem()">影像附件</button-tab-item>
+      <button-tab-item v-if="showApproveTab" @on-item-click="selectItem()">核批详情</button-tab-item>
     </button-tab>
     <scroller lock-x scrollbarY height="-154">
       <div class="policy-info-group" v-show="showPolicyInfo">
@@ -190,6 +191,54 @@
       <div class="image-attachments-group" v-show="showImageAttachments">
 
       </div>
+
+      <div class="approve-info-group" v-show="showApproveInfo">
+        <group gutter="0" class="info-group basic" v-show="showApproveInfo && approveInfo.headerInfo">
+          <cell-form-preview :list="approveInfo.headerInfo"
+                             :border-intent="false">
+          </cell-form-preview>
+        </group>
+        <group gutter="0" class="info-group" v-show="showApproveInfo && approveInfo.TCIInfo">
+          <cell class="title" title="交强险" :border-intent="false"></cell>
+          <cell-form-preview :list="approveInfo.TCIInfo"
+                             :border-intent="false">
+          </cell-form-preview>
+        </group>
+        <group gutter="0" class="info-group" v-show="showApproveInfo && approveInfo.VCIInfo">
+          <cell class="title" title="商业险" :border-intent="false"></cell>
+          <cell-form-preview :list="approveInfo.VCIInfo"
+                             :border-intent="false">
+          </cell-form-preview>
+        </group>
+        <group gutter="0" class="info-group">
+          <cell class="title" title="批文比较内容" :border-intent="false"></cell>
+          <div class="info-table"
+               v-show="showApproveInfo && approveInfo.compareInfo.list.length">
+            <x-table full-bordered>
+              <thead>
+              <tr>
+                <th>变更项目</th>
+                <th>变化前</th>
+                <th>变化后</th>
+                <th>保费变化(元)</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr v-for="(item, index) in approveInfo.compareInfo.list" :key="index">
+                <td>{{item.itemName}}</td>
+                <td>{{item.before}}</td>
+                <td>{{item.after}}</td>
+                <td class="red">{{item.change}}</td>
+              </tr>
+              </tbody>
+            </x-table>
+          </div>
+          <cell-form-preview v-show="showApproveInfo && approveInfo.compareInfo.footer"
+                             :list="approveInfo.compareInfo.footer"
+                             :border-intent="false">
+          </cell-form-preview>
+        </group>
+      </div>
     </scroller>
 
     <card class="button-card operation">
@@ -241,6 +290,9 @@ export default {
       showPolicyInfo: true,
       showManualReviewReason: false,
       showImageAttachments: false,
+      showApproveTab: taskHandle.res.businessType === 'T',
+      showApproveInfo: false,
+      showOperationTab: taskHandle.req.viewInd === '0',
       showBasicInfo: false,
       basicInfo: [
         {
@@ -322,7 +374,54 @@ export default {
           description: '批改投保人信息',
           extraMessage: '无'
         }
-      ]
+      ],
+      approveInfo: {
+        headerInfo: [
+          {
+            label: '交强险批发方式',
+            value: '手批'
+          }, {
+            label: '商业险批发方式',
+            value: '手批'
+          }, {
+            label: '按原折扣计算保费',
+            value: '是'
+          }
+        ],
+        TCIInfo: [
+          {
+            label: '批头',
+            value: '3278312674628316481236871'
+          }
+        ],
+        VCIInfo: [
+          {
+            label: '批头',
+            value: '3278312674628316481236871'
+          }
+        ],
+        compareInfo: {
+          list: [
+            {
+              itemName: '项目名称',
+              before: '张飞',
+              after: '关羽',
+              change: '30000'
+            }, {
+              itemName: '项目名称',
+              before: '张飞',
+              after: '关羽',
+              change: '30000'
+            }
+          ],
+          footer: [
+            {
+              label: '批尾',
+              value: '1237129621356123128823'
+            }
+          ]
+        }
+      }
     }
   },
   created () {
@@ -337,6 +436,7 @@ export default {
       this.showPolicyInfo = (this.selectedItem === 0)
       this.showManualReviewReason = (this.selectedItem === 1)
       this.showImageAttachments = (this.selectedItem === 2)
+      this.showApproveInfo = (this.selectedItem === 3)
     },
     // 下发修改提交操作
     submitJunior () {
@@ -472,7 +572,7 @@ export default {
     // 人工核保原因
     showNoAutoCheckInfo () {
       let params = {
-          businessNo: taskHandle.res.businessNo
+        businessNo: taskHandle.res.businessNo
       }
       carService.showNoAutoCheckInfo(params).then(res => {
         Object.assign(taskHandle.res, {showNoAutoCheckInfo: res.data.datas})
@@ -535,7 +635,7 @@ export default {
       }
     }
 
-    .policy-info-group {
+    .policy-info-group, .approve-info-group {
       background-color: #f5f5f5;
       padding:10px;
 
@@ -547,7 +647,6 @@ export default {
       .info-group.basic {
         margin-top: 0;
       }
-
     }
 
     //weui-cells style

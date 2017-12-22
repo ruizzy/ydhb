@@ -7,6 +7,7 @@
             :title="menu.title"
             :is-link="true"
             :link="menu.link">
+        <img slot="icon" :src="menu.icon" width="20" height="23"/>
       </cell>
     </group>
   </div>
@@ -27,13 +28,13 @@
           {
             id: 201,
             title: '任务查看',
-            icon: '',
+            icon: require('../../../assets/img/check.png'),
             link: '/carUWCheckTask'
           },
           {
             id: 202,
             title: '任务处理',
-            icon: '',
+            icon: require('../../../assets/img/process.png'),
             link: '/carUWProcessTask'
           }
         ]
@@ -56,6 +57,11 @@
       height: 25px;
       color: #333333;
       font-size: 14px;
+
+      .weui-cell__hd {
+        height: 23px;
+        margin-right: 10px;
+      }
     }
   }
 </style>
