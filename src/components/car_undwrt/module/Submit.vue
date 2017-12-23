@@ -21,14 +21,15 @@
         </group>
         <group gutter="0" v-if="isJunior">
           <popup-radio title="下发原因"
-                       :options="page.businessTypes"
-                       placeholder="请选择原因">
+                       :options="page.reasonTypes"
+                       placeholder="请选择原因"
+                       v-model="reasonType">
           </popup-radio>
         </group>
       </div>
     </scroller>
 
-    <x-button :text="isJunior ? '下发修改' : '提交上级'">
+    <x-button :text="isJunior ? '下发修改' : '提交上级'" @click.native="isJunior ? submitJunior() : submitSuperior()">
     </x-button>
 
   </div>
@@ -41,7 +42,8 @@
     PopupRadio,
     Scroller,
     XButton} from 'vux'
-  import {taskQuery} from 'business'
+  import {submit,taskHandle} from 'business'
+ import carService from '../carService'
   export default {
     name: 'submit',
     components: {
@@ -57,28 +59,86 @@
         imgSelected: require('../../../assets/img/selected.png'),
         imgDeselected: require('../../../assets/img/deselect.png'),
         selectedNode: 0,
-        resultList: [
-          {
-            nodeNum: 2,
-            nodeName: '首席核保'
-          },
-          {
-            nodeNum: 5,
-            nodeName: '首席核保'
-          },
-          {
-            nodeNum: 8,
-            nodeName: '首席核保'
-          }
-        ],
-        page: taskQuery.page
+        resultList: [],
+        page: submit.page,
+        reasonType: '02',
+        juniorReq: taskHandle.res.prepareHandle,
+        superiorReq: taskHandle.res.prepareSubmitSuperior
       }
     },
     created () {
       this.$store.commit('UPDATE_NAVIGATION_TITLE', {
         navigationTitle: this.isJunior ? '下发修改' : '提交上级'
       })
-    }
+      for(let gwSwfNode of this.juniorReq.gwSwfNodeDtoList){
+        this.resultList.push(
+          {
+            nodeNum: gwSwfNode.nodeNo,
+            nodeName: gwSwfNode.nodeCName
+          }
+        )
+      }
+    },
+    methods: {
+      // 下发修改提交操作
+      submitJunior () {
+        let params = {
+            flowId: this.juniorReq.gwWfLogDto.flowId,
+            logNo: this.juniorReq.gwWfLogDto.logNo,
+            easyScanFlag: 'no',
+            nodeNo: this.selectedNode,
+            nextStepType: this.juniorReq.gwWfLogDto.flag,
+            reasonType: this.reasonType 
+          }
+          let _this = this
+          this.$vux.confirm.show({
+            title: '提示',
+            content: '确定要下发修改吗？',
+            onConfirm () {
+              carService.submitJunior(params).then(res => {
+                if(res.data.datas.SL_RSLT_CODE ==='999999'){
+                      _this.$vux.alert.show({
+                        title: '提示',
+                        content: res.data.datas.SL_RSLT_MESG
+                      })
+                    }
+                console.log(res.data.datas)
+              }, res => {
+                console.log(res.data)
+              })
+            }
+          })
+        },
+      // 提交上级
+      submitSuperior () {
+          let params = {
+            handleText: '提交上级',
+            businessType: this.superiorReq.gwWfLogDto.businessType,
+            businessNo: this.superiorReq.gwWfLogDto.businessNo,
+            flowId: this.superiorReq.gwWfLogDto.flowId,
+            logNo: this.superiorReq.gwWfLogDto.logNo,
+            nodeNo: this.selectedNode
+          }
+          let _this = this
+          this.$vux.confirm.show({
+            title: '提示',
+            content: '确定要提交上级吗？',
+            onConfirm () {
+              carService.submitSuperior(params).then(res => {
+                if(res.data.datas.SL_RSLT_CODE ==='999999'){
+                      _this.$vux.alert.show({
+                        title: '提示',
+                        content: res.data.datas.SL_RSLT_MESG
+                      })
+                    }
+                console.log(res.data.datas)
+              }, res => {
+                console.log(res.data)
+              })
+            }
+          })
+        }
+    },
   }
 </script>
 

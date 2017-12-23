@@ -1,16 +1,19 @@
 /**
  * 核保处理
  */
-const taskHandle = {}
 
+
+const taskHandle = {}
+//请求参数
 taskHandle.req = {
-  gwWfLogDto: '',
-  viewInd: '',
-  pagination: {
-    pageNo: 1,
-    rowsPerPage: 8
-  }
+    gwWfLogDto: '',
+    viewInd: '',
+    pagination: {
+        pageNo: 1,
+        rowsPerPage: 8
+    }
 }
+//返回参数
 taskHandle.res = {
   gwWfLogDto: '',
   // 任务详情start
@@ -57,21 +60,24 @@ taskHandle.res = {
  * @Param obj 核保处理数据初始化
  */
 taskHandle.initTaskHandle = (obj) => {
-    Object.assign(taskHandle.req, obj);
-    if(taskHandle.req.guItemMotorDto){
-        taskHandle.setBasicInfo(taskHandle.req)
+    Object.assign(taskHandle.res, obj);
+    if(taskHandle.res.guItemMotorDto){
+        taskHandle.setBasicInfo(taskHandle.res)
     }
-    if(taskHandle.req.guRiskDto0801){
-        taskHandle.setTCIInfo(taskHandle.req)
+    if(taskHandle.res.guRiskDto0801){
+        taskHandle.setTCIInfo(taskHandle.res)
     }
-    if(taskHandle.req.guRiskDto0812){
-        taskHandle.setVCIInfo(taskHandle.req)
+    if(taskHandle.res.guRiskDto0812){
+        taskHandle.setVCIInfo(taskHandle.res)
     }
-    if(taskHandle.req.guRiskSpecialClausesDtoList){
-        taskHandle.setRiskSpecialClauses(taskHandle.req.guRiskSpecialClausesDtoList)
+    if(taskHandle.res.guRiskSpecialClausesDtoList){
+        taskHandle.setRiskSpecialClauses(taskHandle.res.guRiskSpecialClausesDtoList)
     }
-    if(taskHandle.req.guMainDto){
-        taskHandle.setSellInfo(taskHandle.req)
+    if(taskHandle.res.guMainDto){
+        taskHandle.setSellInfo(taskHandle.res)
+    }
+    if(taskHandle.res.showNoAutoCheckInfo){
+        taskHandle.setNoAutoCheckInfo(taskHandle.res.showNoAutoCheckInfo)
     }
 }
 //基本信息
@@ -325,8 +331,8 @@ taskHandle.setSellInfo = (obj) => {
                 value: obj.guMainDto.operatorCode
             },
         ]
-        if(taskHandle.req.guCommissionDtoList){
-            for(let guCommission of taskHandle.req.guCommissionDtoList){
+        if(taskHandle.res.guCommissionDtoList){
+            for(let guCommission of taskHandle.res.guCommissionDtoList){
                 if(guCommission.riskCode === '0801'){
                     taskHandle.page.sellInfo.TCIArr = [{
                         expenseItem: '手续费',
@@ -342,8 +348,8 @@ taskHandle.setSellInfo = (obj) => {
                 }
             }
         }
-        if(taskHandle.req.guSalesFeeDtoList){
-            for(let guSalesFee of taskHandle.req.guSalesFeeDtoList){
+        if(taskHandle.res.guSalesFeeDtoList){
+            for(let guSalesFee of taskHandle.res.guSalesFeeDtoList){
                 let orgFeePercent
                 switch (guSalesFee.feeType) {
                     case '318':
@@ -379,6 +385,21 @@ taskHandle.setSellInfo = (obj) => {
 taskHandle.getSellInfo = () => {
     return taskHandle.page.sellInfo
 }
+//人工核保信息
+taskHandle.setNoAutoCheckInfo = (obj) => {
+    if(obj){
+        for(let item of obj){
+            taskHandle.page.showNoAutoCheckInfo.push({
+                ruleName: item.ruledId,
+                description: item.description,
+                extraMessage: item.argumen
+            })
+        }
+    }
+}
+taskHandle.getNoAutoCheckInfo = () => {
+    return taskHandle.page.showNoAutoCheckInfo
+}
 taskHandle.page = {
     basicInfo: [],
     TCIInfo: [],
@@ -394,6 +415,7 @@ taskHandle.page = {
         guMain: [],
         TCIArr: [],
         VCIArr: []
-    }
+    },
+    showNoAutoCheckInfo: []
 }
 export default taskHandle

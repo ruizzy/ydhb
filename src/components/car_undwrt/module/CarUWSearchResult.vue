@@ -122,11 +122,22 @@
           })
         }, 500)
       },
-      goTaskHandle (list) {
-        taskHandle.req.gwWfLogDto = list
+      goTaskHandle (result) {
+        taskHandle.req.gwWfLogDto = result
         this.isProcess ? (taskHandle.req.viewInd = '0') : (taskHandle.req.viewInd = '1')
-        this.$router.push({
-          path: '/CarUWTaskHandle'
+        // 核保任务处理/核保任务详情
+        let params = {
+          gwWfLogDto: result,
+          viewInd: taskHandle.req.viewInd || data
+        }
+        carService.undwrtTaskHandle(params).then(res => {
+          taskHandle.initTaskHandle(res.data.datas)
+          this.$router.push({
+            path: '/CarUWTaskHandle'
+          })
+          console.log(res.data.datas)
+        }, res => {
+          console.log(res.data)
         })
       }
     },

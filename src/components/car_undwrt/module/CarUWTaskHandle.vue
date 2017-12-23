@@ -2,7 +2,7 @@
   <div id="car-uw-task-handle">
     <button-tab v-model="selectedItem">
       <button-tab-item selected @on-item-click="selectItem()">保单信息</button-tab-item>
-      <button-tab-item @on-item-click="selectItem()">人工审核原因</button-tab-item>
+      <button-tab-item @on-item-click="selectItem()">人工核保原因</button-tab-item>
       <button-tab-item @on-item-click="selectItem()">影像附件</button-tab-item>
       <button-tab-item v-if="showApproveTab" @on-item-click="selectItem()">核批详情</button-tab-item>
     </button-tab>
@@ -178,7 +178,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="(item, index) in manualReviewReasons" :key="index">
+            <tr v-for="(item, index) in noAutoCheckInfo" :key="index">
               <td>{{item.ruleName}}</td>
               <td>{{item.description}}</td>
               <td>{{item.extraMessage}}</td>
@@ -240,22 +240,22 @@
         </group>
       </div>
     </scroller>
-
     <card class="button-card operation">
-      <x-button mini plain slot="content"
-                text="审核通过"
-                class="has-right-border">
-      </x-button>
-      <x-button mini plain slot="content"
-                text="下发修改"
-                class="has-right-border"
-                :link="'/submit/junior'">
-      </x-button>
-      <x-button mini plain slot="content"
-                text="提交上级"
-                :link="'/submit/superior'">
-      </x-button>
-    </card>
+        <x-button mini plain slot="content"
+                  @click.native="submitPassAudit()"
+                  text="审核通过"
+                  class="has-right-border">
+        </x-button>
+        <x-button mini plain slot="content"
+                  @click.native="prepareHandle()"
+                  text="下发修改"
+                  class="has-right-border">
+        </x-button>
+        <x-button mini plain slot="content"
+                  @click.native="prepareSubmitSuperior()"
+                  text="提交上级">
+        </x-button>
+      </card>
   </div>
 </template>
 
@@ -290,9 +290,7 @@ export default {
       showPolicyInfo: true,
       showManualReviewReason: false,
       showImageAttachments: false,
-      showApproveTab: taskHandle.res.businessType === 'T',
       showApproveInfo: false,
-      showOperationTab: taskHandle.req.viewInd === '0',
       showBasicInfo: false,
       basicInfo: [],
       showTCIInfo: false,
@@ -303,17 +301,7 @@ export default {
       riskSpecialClauses: {},
       showSellInfo: false,
       sellInfo: {},
-      manualReviewReasons: [
-        {
-          ruleName: '批单核保',
-          description: '该批单需人工核保',
-          extraMessage: '无'
-        }, {
-          ruleName: '批改项目',
-          description: '批改投保人信息',
-          extraMessage: '无'
-        }
-      ],
+      noAutoCheckInfo: [],
       approveInfo: {
         headerInfo: [
           {
@@ -367,8 +355,7 @@ export default {
     this.$store.commit('UPDATE_NAVIGATION_TITLE', {
       navigationTitle: taskHandle.req.viewInd === '0' ? '任务处理' : '任务详情'
     })
-    taskHandle.res.gwWfLogDto = taskHandle.req.gwWfLogDto
-    this.undwrtTaskHandle()
+    this.initPageData()
   },
   methods: {
     selectItem () {
@@ -377,34 +364,28 @@ export default {
       this.showImageAttachments = (this.selectedItem === 2)
       this.showApproveInfo = (this.selectedItem === 3)
     },
-    // 下发修改提交操作
-    submitJunior () {
-      let params = {
-        flowId: taskHandle.res.prepareHandle.gwWfLogDto.flowId,
-        logNo: taskHandle.res.prepareHandle.gwWfLogDto.logNo,
-        easyScanFlag: 'no',
-        nodeNo: taskHandle.res.prepareHandle.gwWfLogDto.nodeNo,
-        nextStepType: taskHandle.res.prepareHandle.gwWfLogDto.flag,
-        reasonType: '02' // 下发原因
-      }
-      carService.submitJunior(params).then(res => {
-        Object.assign(taskHandle.res, {submitJunior: res.data.datas})
-        console.log(res.data.datas)
-      }, res => {
-        console.log(res.data)
-      })
-    },
     // 下发修改预操作
     prepareHandle () {
       let params = {
         handleText: '下发修改预操作', // 下发
-        businessType: taskHandle.res.gwWfLogDto.businessType,
-        businessNo: taskHandle.res.gwWfLogDto.businessNo,
-        flowId: taskHandle.res.gwWfLogDto.flowId,
-        logNo: taskHandle.res.gwWfLogDto.logNo
+        businessType: taskHandle.req.gwWfLogDto.businessType,
+        businessNo: taskHandle.req.gwWfLogDto.businessNo,
+        flowId: taskHandle.req.gwWfLogDto.flowId,
+        logNo: taskHandle.req.gwWfLogDto.logNo
       }
       carService.prepareHandle(params).then(res => {
         Object.assign(taskHandle.res, {prepareHandle: res.data.datas})
+        if(res.data.datas.SL_RSLT_CODE ==='999999'){
+
+          this.$router.push({
+                path: '/submit/junior'
+              })
+        }else{
+          this.$vux.alert.show({
+            title: '提示',
+            content: res.data.datas.SL_RSLT_MESG
+          })
+        }
         console.log(res.data.datas)
       }, res => {
         console.log(res.data)
@@ -414,31 +395,25 @@ export default {
     prepareSubmitSuperior () {
       let params = {
         handleText: '提交上级预操作',
-        businessType: taskHandle.res.gwWfLogDto.businessType,
-        businessNo: taskHandle.res.gwWfLogDto.businessNo,
-        flowId: taskHandle.res.gwWfLogDto.flowId,
-        logNo: taskHandle.res.gwWfLogDto.logNo
+        businessType: taskHandle.req.gwWfLogDto.businessType,
+        businessNo: taskHandle.req.gwWfLogDto.businessNo,
+        flowId: taskHandle.req.gwWfLogDto.flowId,
+        logNo: taskHandle.req.gwWfLogDto.logNo,
+        nodeNo: taskHandle.req.gwWfLogDto.nodeNo
       }
       carService.prepareSubmitSuperior(params).then(res => {
         Object.assign(taskHandle.res, {prepareSubmitSuperior: res.data.datas})
-        console.log(res.data.datas)
-      }, res => {
-        console.log(res.data)
-      })
-    },
-    // 提交上级
-    submitSuperior () {
-      let params = {
-        gwWfLogDto: taskHandle.res.gwWfLogDto,
-        gwSwfNodeDto: {
-          nodeNo: '9',
-          nodeCName: '高2级'
-        },
-        handleType: '11',
-        easyScanFlag: 'no'
-      }
-      carService.submitSuperior(params).then(res => {
-        Object.assign(taskHandle.res, {submitSuperior: res.data.datas})
+        if(res.data.datas.SL_RSLT_CODE ==='999999'){
+
+          // this.$router.push({
+          //       path: '/submit/superior'
+          //     })
+        }else{
+          this.$vux.alert.show({
+            title: '提示',
+            content: res.data.datas.SL_RSLT_MESG
+          })
+        }
         console.log(res.data.datas)
       }, res => {
         console.log(res.data)
@@ -449,41 +424,45 @@ export default {
       let params = {
         handType: '11', // 核保、核赔标志，不知道哪里取
         handleText: '意见很大',
-        flowId: taskHandle.res.gwWfLogDto.flowId,
-        logNo: taskHandle.res.gwWfLogDto.logNo,
-        businessNo: taskHandle.res.gwWfLogDto.businessNo
+        flowId: taskHandle.req.gwWfLogDto.flowId,
+        logNo: taskHandle.req.gwWfLogDto.logNo,
+        businessNo: taskHandle.req.gwWfLogDto.businessNo
       }
-      carService.submitPassAudit(params).then(res => {
-        Object.assign(taskHandle.res, {submitPassAudit: res.data.datas})
-        console.log(res.data.datas)
-      }, res => {
-        console.log(res.data)
+      let _this = this
+      this.$vux.confirm.show({
+        title: '提示',
+        content: '确定要审核通过吗？',
+        onConfirm () {
+          carService.submitPassAudit(params).then(res => {
+            Object.assign(taskHandle.res, {submitPassAudit: res.data.datas})
+            if(res.data.datas.SL_RSLT_CODE ==='999999'){
+              _this.$vux.alert.show({
+                title: '提示',
+                content: res.data.datas.SL_RSLT_MESG
+              })
+            }
+            console.log(res.data.datas);
+          }, res => {
+            console.log(res.data)
+          })
+        }
       })
     },
     // 核保任务处理/核保任务详情
-    undwrtTaskHandle (data) {
-      let params = {
-        gwWfLogDto: taskHandle.req.gwWfLogDto,
-        viewInd: taskHandle.req.viewInd || data
-      }
-      carService.undwrtTaskHandle(params).then(res => {
-        taskHandle.initTaskHandle(res.data.datas)
-        this.basicInfo = taskHandle.getBasicInfo()
-        this.TCIInfo = taskHandle.getTCIInfo()
-        this.VCIInfo = taskHandle.getVCIInfo()
-        this.riskSpecialClauses = taskHandle.getRiskSpecialClauses()
-        this.sellInfo = taskHandle.getSellInfo()
-        console.log(res.data.datas)
-      }, res => {
-        console.log(res.data)
-      })
+    initPageData () {
+      this.basicInfo = taskHandle.getBasicInfo()
+      this.TCIInfo = taskHandle.getTCIInfo()
+      this.VCIInfo = taskHandle.getVCIInfo()
+      this.riskSpecialClauses = taskHandle.getRiskSpecialClauses()
+      this.sellInfo = taskHandle.getSellInfo()
+      this.noAutoCheckInfo = taskHandle.getNoAutoCheckInfo()
     },
     // 影像附件
     viewMaterialAdjunct () {
       let params = {
-        businessNo: taskHandle.res.gwWfLogDto.businessNo,
+        businessNo: taskHandle.req.gwWfLogDto.businessNo,
         businessSeqNo: '',
-        productRiskCode: taskHandle.res.gwWfLogDto.riskCode,
+        productRiskCode: taskHandle.req.gwWfLogDto.riskCode,
         businessType: 'Proposal',
         baseActionType: 'view'
       }
@@ -496,14 +475,14 @@ export default {
     },
     // 平台信息
     queryCiPlatFormInfo () {
-      let planCode = taskHandle.res.gwWfLogDto.riskCode === '1363' ? '1363' : '0000'
+      let planCode = taskHandle.req.gwWfLogDto.riskCode === '1363' ? '1363' : '0000'
       let params = {
         planCode: planCode,
         businessType: 'Proposal',
-        productRiskCode: taskHandle.res.gwWfLogDto.riskCode,
+        productRiskCode: taskHandle.req.gwWfLogDto.riskCode,
         oldPolicyNo: '',
-        proposalNo: taskHandle.res.gwWfLogDto.businessNo,
-        businessNo: taskHandle.res.gwWfLogDto.businessNo,
+        proposalNo: taskHandle.req.gwWfLogDto.businessNo,
+        businessNo: taskHandle.req.gwWfLogDto.businessNo,
         timestamp: ''
       }
       carService.queryCiPlatFormInfo(params).then(res => {
@@ -513,29 +492,16 @@ export default {
         console.log(res.data)
       })
     },
-    // 人工核保原因
-    showNoAutoCheckInfo () {
-      let params = {
-        businessNo: taskHandle.res.businessNo
-      }
-      carService.showNoAutoCheckInfo(params).then(res => {
-        Object.assign(taskHandle.res, {showNoAutoCheckInfo: res.data.datas})
-        console.log(res.data.datas)
-      }, res => {
-        console.log(res.data)
-      })
-    },
     // 查看历次审核意见
     commonViewTrace () {
       let params = {
-        businessNo: taskHandle.res.gwWfLogDto.businessNo,
-        businessType: taskHandle.res.gwWfLogDto.businessType
+        businessNo: taskHandle.req.gwWfLogDto.businessNo,
+        businessType: taskHandle.req.gwWfLogDto.businessType
       }
       carService.commonViewTrace(params).then(res => {
         Object.assign(taskHandle.res, {commonViewTrace: res.data.datas})
 
         console.log(res.data.datas)
-        console.log(taskHandle.res)
       }, res => {
         console.log(res.data)
       })
@@ -543,7 +509,7 @@ export default {
     // 获取验车码
     queryCarCheckCode () {
       let params = {
-        proposalNo: taskHandle.res.gwWfLogDto.businessNo
+        proposalNo: taskHandle.req.gwWfLogDto.businessNo
       }
       carService.queryCarCheckCode(params).then(res => {
         Object.assign(taskHandle.res, {carCheckCode: res.data.datas})
@@ -551,6 +517,14 @@ export default {
       }, res => {
         console.log(res.data)
       })
+    }
+  },
+  computed:{
+    showApproveTab(){
+      return taskHandle.req.gwWfLogDto.businessType === 'E'
+    },
+    showOperationTab(){
+      return taskHandle.req.viewInd === '0'
     }
   }
 }
