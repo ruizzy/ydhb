@@ -130,16 +130,49 @@
           gwWfLogDto: result,
           viewInd: taskHandle.req.viewInd || data
         }
+        let _this = this
         carService.undwrtTaskHandle(params).then(res => {
           taskHandle.initTaskHandle(res.data.datas)
-          this.$router.push({
-            path: '/CarUWTaskHandle'
-          })
+          if(res.data.datas.SL_RSLT_CODE ==='999999'){
+            this.$router.push({
+              path: '/CarUWTaskHandle'
+            })
+          }else{
+            _this.$vux.alert.show({
+                title: '提示',
+                content: res.data.datas.SL_RSLT_MESG
+              })
+          }
           console.log(res.data.datas)
         }, res => {
           console.log(res.data)
         })
-      }
+      },
+      //核保通过撤回
+      recallTask (result) {
+        taskHandle.req.gwWfLogDto = result
+        let params = {
+          businessNo: result.businessNo
+        }
+        let _this = this
+        this.$vux.confirm.show({
+          title: '提示',
+          content: '确定要撤回吗？',
+          onConfirm () {
+            carService.recallTask(params).then(res => {
+              if(res.data.datas.SL_RSLT_CODE ==='999999'){
+                _this.$vux.alert.show({
+                  title: '提示',
+                  content: res.data.datas.SL_RSLT_MESG
+                })
+              }
+              console.log(res.data.datas);
+            }, res => {
+              console.log(res.data)
+            })
+          }
+        })
+      },
     },
     computed: {
     }

@@ -49,5 +49,21 @@ carService.commonViewTrace = params => {
 carService.queryCarCheckCode = params => {
   return Vue.http.post('/car/queryCarCheckCode', params)
 }
+// 审核通过任务撤回
+carService.recallTask = params => {
+  return Vue.http.post('/car/recallTask', params)
+}
+// 车损险纯风险保费
+carService.queryPureRiskFee = params => {
+  return Vue.http.post('/car/queryPureRiskFee', params)
+}
+// 精友预填
+carService.getVehicleInfoModelCode = params => {
+  return Vue.http.post('/car/getVehicleInfoModelCode', params)
+}
+// 精友信息
+carService.viewVehicleInfo = params => {
+  return Vue.http.post('/car/viewVehicleInfo', params)
+}
 
 export default carService

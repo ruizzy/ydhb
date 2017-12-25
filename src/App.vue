@@ -131,10 +131,10 @@
   @import '~vux/src/styles/reset.less';
 
   #app {
-    height: 100%;
     left: 0;
     position: absolute;
     top: 0;
+    height: 100%;
     width: 100%;
 
     .vux-header.navigation-header {
