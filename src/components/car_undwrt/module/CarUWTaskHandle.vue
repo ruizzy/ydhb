@@ -74,8 +74,8 @@
               <tbody>
               <tr v-for="(item, index) in VCIInfo.itemKind" :key="index">
                 <td>{{item.kindName}}</td>
-                <td class="orange">{{item.sumInsured}}</td>
-                <td class="red">{{item.uwPremium}}</td>
+                <td class="orange thirty-percent">{{item.sumInsured}}</td>
+                <td class="red thirty-percent">{{item.uwPremium}}</td>
               </tr>
               </tbody>
             </x-table>
@@ -137,8 +137,8 @@
                 <tbody>
                 <tr v-for="(item, index) in sellInfo.TCIArr" :key="index">
                   <td>{{item.expenseItem}}</td>
-                  <td class="orange">{{item.defaultValue}}</td>
-                  <td class="red">{{item.adjustedValue}}</td>
+                  <td class="orange thirty-percent">{{item.defaultValue}}</td>
+                  <td class="red thirty-percent">{{item.adjustedValue}}</td>
                 </tr>
                 </tbody>
               </x-table>
@@ -157,8 +157,8 @@
                 <tbody>
                 <tr v-for="(item, index) in sellInfo.VCIArr" :key="index">
                   <td>{{item.expenseItem}}</td>
-                  <td class="orange">{{item.defaultValue}}</td>
-                  <td class="red">{{item.adjustedValue}}</td>
+                  <td class="orange thirty-percent">{{item.defaultValue}}</td>
+                  <td class="red thirty-percent">{{item.adjustedValue}}</td>
                 </tr>
                 </tbody>
               </x-table>
@@ -169,19 +169,19 @@
 
       <div class="manual-review-reason-group" v-show="showManualReviewReason">
         <div class="info-table no-cell-border" >
-          <x-table :cell-bordered="false">
+          <x-table full-bordered>
             <thead>
             <tr>
               <th>规则名称</th>
-              <th>规则违反信息描述</th>
+              <th>违反信息描述</th>
               <th>附加信息</th>
             </tr>
             </thead>
             <tbody>
             <tr v-for="(item, index) in noAutoCheckInfo" :key="index">
               <td>{{item.ruleName}}</td>
-              <td>{{item.description}}</td>
-              <td>{{item.extraMessage}}</td>
+              <td class="thirty-percent">{{item.description}}</td>
+              <td class="thirty-percent">{{item.extraMessage}}</td>
             </tr>
             </tbody>
           </x-table>
@@ -375,12 +375,11 @@ export default {
       }
       carService.prepareHandle(params).then(res => {
         Object.assign(taskHandle.res, {prepareHandle: res.data.datas})
-        if(res.data.datas.SL_RSLT_CODE ==='999999'){
-
+        if (res.data.datas.SL_RSLT_CODE === '999999') {
           this.$router.push({
-                path: '/submit/junior'
-              })
-        }else{
+            path: '/submit/junior'
+          })
+        } else {
           this.$vux.alert.show({
             title: '提示',
             content: res.data.datas.SL_RSLT_MESG
@@ -403,12 +402,12 @@ export default {
       }
       carService.prepareSubmitSuperior(params).then(res => {
         Object.assign(taskHandle.res, {prepareSubmitSuperior: res.data.datas})
-        if(res.data.datas.SL_RSLT_CODE ==='999999'){
+        if (res.data.datas.SL_RSLT_CODE === '999999') {
 
           // this.$router.push({
           //       path: '/submit/superior'
           //     })
-        }else{
+        } else {
           this.$vux.alert.show({
             title: '提示',
             content: res.data.datas.SL_RSLT_MESG
@@ -435,13 +434,13 @@ export default {
         onConfirm () {
           carService.submitPassAudit(params).then(res => {
             Object.assign(taskHandle.res, {submitPassAudit: res.data.datas})
-            if(res.data.datas.SL_RSLT_CODE ==='999999'){
+            if (res.data.datas.SL_RSLT_CODE === '999999') {
               _this.$vux.alert.show({
                 title: '提示',
                 content: res.data.datas.SL_RSLT_MESG
               })
             }
-            console.log(res.data.datas);
+            console.log(res.data.datas)
           }, res => {
             console.log(res.data)
           })
@@ -519,11 +518,11 @@ export default {
       })
     }
   },
-  computed:{
-    showApproveTab(){
+  computed: {
+    showApproveTab () {
       return taskHandle.req.gwWfLogDto.businessType === 'E'
     },
-    showOperationTab(){
+    showOperationTab () {
       return taskHandle.req.viewInd === '0'
     }
   }
@@ -691,6 +690,20 @@ export default {
       font-size: 14px;
       font-weight: 400;
       margin: 0 15px 10px 15px;
+
+      th {
+        font-weight: 600;
+        padding: 0 5px;
+      }
+
+      td {
+        line-height: 30px;
+        padding: 5px;
+      }
+
+      td.thirty-percent {
+        width: 30%;
+      }
 
       td.orange {
         color: #ff5b00;

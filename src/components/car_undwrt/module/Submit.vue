@@ -88,7 +88,7 @@
             easyScanFlag: 'no',
             nodeNo: this.selectedNode,
             nextStepType: this.juniorReq.gwWfLogDto.flag,
-            reasonType: this.reasonType 
+            reasonType: this.reasonType
           }
           let _this = this
           this.$vux.confirm.show({

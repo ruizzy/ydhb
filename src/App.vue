@@ -130,11 +130,12 @@
 <style lang="less">
   @import '~vux/src/styles/reset.less';
 
-  body {
-    padding-top: constant(safe-area-inset-top);
-  }
-
   #app {
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
 
     .vux-header.navigation-header {
       height: 64px;
