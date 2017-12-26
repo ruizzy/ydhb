@@ -6,8 +6,8 @@
       <button-tab-item @on-item-click="selectItem()">影像附件</button-tab-item>
       <button-tab-item v-if="showApproveTab" @on-item-click="selectItem()">核批详情</button-tab-item>
     </button-tab>
-    <scroller lock-x scrollbarY height="-154">
-      <div class="policy-info-group" v-show="showPolicyInfo">
+    <scroller lock-x scrollbarY height="-154" v-show="showPolicyInfo">
+      <div class="policy-info-group">
         <group gutter="0" class="info-group basic">
           <cell is-link
                 class="title"
@@ -166,106 +166,67 @@
           </group>
         </group>
       </div>
+    </scroller>
+    <scroller lock-x scrollbarY height="-154" v-show="showManualReviewReason">
+          <div class="manual-review-reason-group">
+            <div class="info-table no-cell-border" >
+              <x-table :cell-bordered="false">
+                <thead>
+                <tr>
+                  <th>规则名称</th>
+                  <th>规则违反信息描述</th>
+                  <th>附加信息</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(item, index) in noAutoCheckInfo" :key="index">
+                  <td>{{item.ruleName}}</td>
+                  <td>{{item.description}}</td>
+                  <td>{{item.extraMessage}}</td>
+                </tr>
+                </tbody>
+              </x-table>
+            </div>
+          </div>
+    </scroller>
+    <scroller lock-x scrollbarY height="-154" v-show="showImageAttachments">
+          <div class="image-attachments-group">
 
-      <div class="manual-review-reason-group" v-show="showManualReviewReason">
-        <div class="info-table no-cell-border" >
-          <x-table full-bordered>
-            <thead>
-            <tr>
-              <th>规则名称</th>
-              <th>违反信息描述</th>
-              <th>附加信息</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-for="(item, index) in noAutoCheckInfo" :key="index">
-              <td>{{item.ruleName}}</td>
-              <td class="thirty-percent">{{item.description}}</td>
-              <td class="thirty-percent">{{item.extraMessage}}</td>
-            </tr>
-            </tbody>
-          </x-table>
+          </div>
+    </scroller>
+    <scroller lock-x scrollbarY height="-154" v-show="showEndorInfo">
+      <div class="approve-info-group">
+        <group gutter="0" class="info-group basic" v-show="showEndorInfo && endorHeaderInfo">
+          <cell-form-preview :list="endorHeaderInfo"
+                             :border-intent="false">
+          </cell-form-preview>
+        </group>
+        <div v-for="(endor, index) in endorInfo">
+          <group gutter="0" class="info-group" v-show="showEndorInfo && endor">
+            <cell class="title" :title="endor.riskCName" :border-intent="false"></cell>
+            <cell-form-preview :list="endor.endorHead"
+                              :border-intent="false">
+            </cell-form-preview>
+          </group>
+          <group gutter="0" class="info-group">
+            <cell class="title" title="批文比较内容" :border-intent="false"></cell>
+            <div class="info-table"
+                v-show="showEndorInfo && endor.endorBlock.length"  v-for="block in endor.endorBlock">
+                <group gutter="0">
+                  <cell-form-preview
+                    v-for="(detail, index) in block.detail"
+                    :key="index"
+                    :list="processDetail(detail)"
+                    :border-intent="false">
+                  </cell-form-preview>
+                </group>
+            </div>
+            <!-- <cell-form-preview v-show="showEndorInfo && endorInfo.compareInfo.footer"
+                              :list="endorInfo.compareInfo.footer"
+                              :border-intent="false">
+            </cell-form-preview> -->
+          </group>
         </div>
-      </div>
-
-      <div class="image-attachments-group" v-show="showImageAttachments">
-
-      </div>
-
-      <div class="approve-info-group" v-show="showEndorInfo">
-        <group gutter="0" class="info-group basic" v-show="showEndorInfo && endorInfo.headerInfo">
-          <cell-form-preview :list="endorInfo.headerInfo"
-                             :border-intent="false">
-          </cell-form-preview>
-        </group>
-        <group gutter="0" class="info-group" v-show="showEndorInfo && endorInfo.TCIInfo">
-          <cell class="title" title="交强险" :border-intent="false"></cell>
-          <cell-form-preview :list="endorInfo.TCIInfo"
-                             :border-intent="false">
-          </cell-form-preview>
-        </group>
-        <group gutter="0" class="info-group">
-          <cell class="title" title="批文比较内容" :border-intent="false"></cell>
-          <div class="info-table"
-               v-show="showEndorInfo && endorInfo.compareInfo.list.length">
-            <x-table full-bordered>
-              <thead>
-              <tr>
-                <th>变更项目</th>
-                <th>变化前</th>
-                <th>变化后</th>
-                <th>保费变化(元)</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr v-for="(item, index) in endorInfo.compareInfo.list" :key="index">
-                <td>{{item.itemName}}</td>
-                <td>{{item.before}}</td>
-                <td>{{item.after}}</td>
-                <td class="red">{{item.change}}</td>
-              </tr>
-              </tbody>
-            </x-table>
-          </div>
-          <cell-form-preview v-show="showEndorInfo && endorInfo.compareInfo.footer"
-                             :list="endorInfo.compareInfo.footer"
-                             :border-intent="false">
-          </cell-form-preview>
-        </group>
-        <group gutter="0" class="info-group" v-show="showEndorInfo && endorInfo.VCIInfo">
-          <cell class="title" title="商业险" :border-intent="false"></cell>
-          <cell-form-preview :list="endorInfo.VCIInfo"
-                             :border-intent="false">
-          </cell-form-preview>
-        </group>
-        <group gutter="0" class="info-group">
-          <cell class="title" title="批文比较内容" :border-intent="false"></cell>
-          <div class="info-table"
-               v-show="showEndorInfo && endorInfo.compareInfo.list.length">
-            <x-table full-bordered>
-              <thead>
-              <tr>
-                <th>变更项目</th>
-                <th>变化前</th>
-                <th>变化后</th>
-                <th>保费变化(元)</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr v-for="(item, index) in endorInfo.compareInfo.list" :key="index">
-                <td>{{item.itemName}}</td>
-                <td>{{item.before}}</td>
-                <td>{{item.after}}</td>
-                <td class="red">{{item.change}}</td>
-              </tr>
-              </tbody>
-            </x-table>
-          </div>
-          <cell-form-preview v-show="showEndorInfo && endorInfo.compareInfo.footer"
-                             :list="endorInfo.compareInfo.footer"
-                             :border-intent="false">
-          </cell-form-preview>
-        </group>
       </div>
     </scroller>
     <card class="button-card operation" v-show="showOperationTab">
@@ -330,8 +291,7 @@ export default {
       showSellInfo: false,
       sellInfo: {},
       noAutoCheckInfo: [],
-      endorInfo: {
-        headerInfo: [
+      endorHeaderInfo: [
           {
             label: '交强险批发方式',
             value: '手批'
@@ -343,40 +303,7 @@ export default {
             value: '是'
           }
         ],
-        TCIInfo: [
-          {
-            label: '批头',
-            value: '3278312674628316481236871'
-          }
-        ],
-        VCIInfo: [
-          {
-            label: '批头',
-            value: '3278312674628316481236871'
-          }
-        ],
-        compareInfo: {
-          list: [
-            {
-              itemName: '项目名称',
-              before: '张飞',
-              after: '关羽',
-              change: '30000'
-            }, {
-              itemName: '项目名称',
-              before: '张飞',
-              after: '关羽',
-              change: '30000'
-            }
-          ],
-          footer: [
-            {
-              label: '批尾',
-              value: '1237129621356123128823'
-            }
-          ]
-        }
-      }
+      endorInfo: []
     }
   },
   created () {
@@ -483,6 +410,7 @@ export default {
       this.riskSpecialClauses = taskHandle.getRiskSpecialClauses()
       this.sellInfo = taskHandle.getSellInfo()
       this.noAutoCheckInfo = taskHandle.getNoAutoCheckInfo()
+      this.endorInfo = taskHandle.getEndorInfo()
     },
     // 影像附件
     viewMaterialAdjunct () {
@@ -581,6 +509,23 @@ export default {
         console.log(res.data)
       })
     },
+    processDetail (detail) {
+      return [
+          {
+            label: '变更项目',
+            value: detail.fieldName
+          }, {
+            label: '变化前',
+            value: detail.oldValue
+          }, {
+            label: '变化后',
+            value: detail.newValue
+          }, {
+            label: '保费变化',
+            value: detail.changeQuantity
+          }
+        ]
+      }
   },
   computed:{
     showApproveTab(){
