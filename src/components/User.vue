@@ -48,12 +48,12 @@
   #user {
 
     .head {
-      height: 150px;
+      height: 200px;
       text-align: center;
       width: 100%;
 
       .head-image {
-        height: 150px;
+        height: 200px;
         left: 0;
         position: absolute;
         top: 0;
@@ -64,7 +64,7 @@
       .avatar {
         height: 60px;
         position: relative;
-        top: 30px;
+        top: 60px;
         width: 60px;
       }
 
@@ -72,14 +72,14 @@
         color: white;
         font-size: 14px;
         position: relative;
-        top: 30px;
+        top: 60px;
       }
 
       .company {
         color: white;
         font-size: 12px;
         position: relative;
-        top: 30px;
+        top: 60px;
       }
     }
 

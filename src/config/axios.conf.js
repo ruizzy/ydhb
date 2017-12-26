@@ -10,6 +10,7 @@ let nprogressNum = 0
 let token = null
 
 axios.defaults.headers.post['Content-Type'] = 'application/json'
+
 /**
  * axios 公共配置
  * [1] 拦截请求
@@ -19,7 +20,7 @@ axios.interceptors.request.use((config) => {
   // 超时设置
   config.timeout = config.timeout || timeout
   config.url = context + config.url
-  // config.url = "http://127.0.0.1:18021" + config.url
+  // config.url = 'https://gw-int2.sino-life.com:8443/SL_PEMNG' + config.url
   if (!token) {
     let user = sessionStorage.getItem('user')
     if (user) {
