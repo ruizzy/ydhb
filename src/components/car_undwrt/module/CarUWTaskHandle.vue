@@ -192,28 +192,22 @@
 
       </div>
 
-      <div class="approve-info-group" v-show="showApproveInfo">
-        <group gutter="0" class="info-group basic" v-show="showApproveInfo && approveInfo.headerInfo">
-          <cell-form-preview :list="approveInfo.headerInfo"
+      <div class="approve-info-group" v-show="showEndorInfo">
+        <group gutter="0" class="info-group basic" v-show="showEndorInfo && endorInfo.headerInfo">
+          <cell-form-preview :list="endorInfo.headerInfo"
                              :border-intent="false">
           </cell-form-preview>
         </group>
-        <group gutter="0" class="info-group" v-show="showApproveInfo && approveInfo.TCIInfo">
+        <group gutter="0" class="info-group" v-show="showEndorInfo && endorInfo.TCIInfo">
           <cell class="title" title="交强险" :border-intent="false"></cell>
-          <cell-form-preview :list="approveInfo.TCIInfo"
-                             :border-intent="false">
-          </cell-form-preview>
-        </group>
-        <group gutter="0" class="info-group" v-show="showApproveInfo && approveInfo.VCIInfo">
-          <cell class="title" title="商业险" :border-intent="false"></cell>
-          <cell-form-preview :list="approveInfo.VCIInfo"
+          <cell-form-preview :list="endorInfo.TCIInfo"
                              :border-intent="false">
           </cell-form-preview>
         </group>
         <group gutter="0" class="info-group">
           <cell class="title" title="批文比较内容" :border-intent="false"></cell>
           <div class="info-table"
-               v-show="showApproveInfo && approveInfo.compareInfo.list.length">
+               v-show="showEndorInfo && endorInfo.compareInfo.list.length">
             <x-table full-bordered>
               <thead>
               <tr>
@@ -224,7 +218,7 @@
               </tr>
               </thead>
               <tbody>
-              <tr v-for="(item, index) in approveInfo.compareInfo.list" :key="index">
+              <tr v-for="(item, index) in endorInfo.compareInfo.list" :key="index">
                 <td>{{item.itemName}}</td>
                 <td>{{item.before}}</td>
                 <td>{{item.after}}</td>
@@ -233,14 +227,48 @@
               </tbody>
             </x-table>
           </div>
-          <cell-form-preview v-show="showApproveInfo && approveInfo.compareInfo.footer"
-                             :list="approveInfo.compareInfo.footer"
+          <cell-form-preview v-show="showEndorInfo && endorInfo.compareInfo.footer"
+                             :list="endorInfo.compareInfo.footer"
+                             :border-intent="false">
+          </cell-form-preview>
+        </group>
+        <group gutter="0" class="info-group" v-show="showEndorInfo && endorInfo.VCIInfo">
+          <cell class="title" title="商业险" :border-intent="false"></cell>
+          <cell-form-preview :list="endorInfo.VCIInfo"
+                             :border-intent="false">
+          </cell-form-preview>
+        </group>
+        <group gutter="0" class="info-group">
+          <cell class="title" title="批文比较内容" :border-intent="false"></cell>
+          <div class="info-table"
+               v-show="showEndorInfo && endorInfo.compareInfo.list.length">
+            <x-table full-bordered>
+              <thead>
+              <tr>
+                <th>变更项目</th>
+                <th>变化前</th>
+                <th>变化后</th>
+                <th>保费变化(元)</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr v-for="(item, index) in endorInfo.compareInfo.list" :key="index">
+                <td>{{item.itemName}}</td>
+                <td>{{item.before}}</td>
+                <td>{{item.after}}</td>
+                <td class="red">{{item.change}}</td>
+              </tr>
+              </tbody>
+            </x-table>
+          </div>
+          <cell-form-preview v-show="showEndorInfo && endorInfo.compareInfo.footer"
+                             :list="endorInfo.compareInfo.footer"
                              :border-intent="false">
           </cell-form-preview>
         </group>
       </div>
     </scroller>
-    <card class="button-card operation">
+    <card class="button-card operation" v-show="showOperationTab">
         <x-button mini plain slot="content"
                   @click.native="submitPassAudit()"
                   text="审核通过"
@@ -290,7 +318,7 @@ export default {
       showPolicyInfo: true,
       showManualReviewReason: false,
       showImageAttachments: false,
-      showApproveInfo: false,
+      showEndorInfo: false,
       showBasicInfo: false,
       basicInfo: [],
       showTCIInfo: false,
@@ -302,7 +330,7 @@ export default {
       showSellInfo: false,
       sellInfo: {},
       noAutoCheckInfo: [],
-      approveInfo: {
+      endorInfo: {
         headerInfo: [
           {
             label: '交强险批发方式',
@@ -362,7 +390,7 @@ export default {
       this.showPolicyInfo = (this.selectedItem === 0)
       this.showManualReviewReason = (this.selectedItem === 1)
       this.showImageAttachments = (this.selectedItem === 2)
-      this.showApproveInfo = (this.selectedItem === 3)
+      this.showEndorInfo = (this.selectedItem === 3)
     },
     // 下发修改预操作
     prepareHandle () {
@@ -375,11 +403,12 @@ export default {
       }
       carService.prepareHandle(params).then(res => {
         Object.assign(taskHandle.res, {prepareHandle: res.data.datas})
-        if (res.data.datas.SL_RSLT_CODE === '999999') {
+        if(res.data.datas.SL_RSLT_CODE ==='999999'){
+
           this.$router.push({
-            path: '/submit/junior'
-          })
-        } else {
+                path: '/submit/junior'
+              })
+        }else{
           this.$vux.alert.show({
             title: '提示',
             content: res.data.datas.SL_RSLT_MESG
@@ -402,12 +431,11 @@ export default {
       }
       carService.prepareSubmitSuperior(params).then(res => {
         Object.assign(taskHandle.res, {prepareSubmitSuperior: res.data.datas})
-        if (res.data.datas.SL_RSLT_CODE === '999999') {
-
-          // this.$router.push({
-          //       path: '/submit/superior'
-          //     })
-        } else {
+        if(res.data.datas.SL_RSLT_CODE ==='999999'){
+          this.$router.push({
+                path: '/submit/superior'
+              })
+        }else{
           this.$vux.alert.show({
             title: '提示',
             content: res.data.datas.SL_RSLT_MESG
@@ -434,7 +462,7 @@ export default {
         onConfirm () {
           carService.submitPassAudit(params).then(res => {
             Object.assign(taskHandle.res, {submitPassAudit: res.data.datas})
-            if (res.data.datas.SL_RSLT_CODE === '999999') {
+            if(res.data.datas.SL_RSLT_CODE ==='999999'){
               _this.$vux.alert.show({
                 title: '提示',
                 content: res.data.datas.SL_RSLT_MESG
@@ -516,13 +544,49 @@ export default {
       }, res => {
         console.log(res.data)
       })
-    }
+    },
+    // 获取车损险纯风险保费
+    queryPureRiskFee () {
+      let params = {
+        guProposalItemMotorDto: taskHandle.res.guItemMotorDto
+      }
+      carService.queryPureRiskFee(params).then(res => {
+        Object.assign(taskHandle.res, {pureRiskFee: res.data.datas})
+        console.log(res.data.datas)
+      }, res => {
+        console.log(res.data)
+      })
+    },
+    // 精友预填
+    getVehicleInfoModelCode () {
+      let params = {
+        guProposalItemMotorDto: taskHandle.res.guItemMotorDto
+      }
+      carService.getVehicleInfoModelCode(params).then(res => {
+        Object.assign(taskHandle.res, {vehicleInfoModelCode: res.data.datas})
+        console.log(res.data.datas)
+      }, res => {
+        console.log(res.data)
+      })
+    },
+    // 精友信息
+    viewVehicleInfo () {
+      let params = {
+        guProposalItemMotorDto: taskHandle.res.guItemMotorDto
+      }
+      carService.viewVehicleInfo(params).then(res => {
+        Object.assign(taskHandle.res, {viewVehicleInfo: res.data.datas})
+        console.log(res.data.datas)
+      }, res => {
+        console.log(res.data)
+      })
+    },
   },
-  computed: {
-    showApproveTab () {
+  computed:{
+    showApproveTab(){
       return taskHandle.req.gwWfLogDto.businessType === 'E'
     },
-    showOperationTab () {
+    showOperationTab(){
       return taskHandle.req.viewInd === '0'
     }
   }

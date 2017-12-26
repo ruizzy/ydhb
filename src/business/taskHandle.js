@@ -32,6 +32,7 @@ taskHandle.res = {
   guRiskSpecialClausesDtoList: '',
   guSalesFeeDtoList: '',
   gwSwfNodeDtoListtemp: '',
+  guEndorTextDtoTempList: '',
   syInfo: '',
   // 人工核保原因start
   showNoAutoCheckInfo: '',
@@ -52,7 +53,13 @@ taskHandle.res = {
   // 提交上级
   submitSuperior: '',
   // 提交上级预操作
-  prepareSubmitSuperior: ''
+  prepareSubmitSuperior: '',
+  // 车损险纯风险保费
+  pureRiskFee: '',
+  // 精友预填
+  vehicleInfoModelCode: '',
+  // 精友信息
+  viewVehicleInfo: ''
 }
 // ================================ methods ============================
 /**
@@ -78,6 +85,22 @@ taskHandle.initTaskHandle = (obj) => {
   if (taskHandle.res.showNoAutoCheckInfo) {
     taskHandle.setNoAutoCheckInfo(taskHandle.res.showNoAutoCheckInfo)
   }
+  // if (taskHandle.res.guEndorTextDtoTempList) {
+  //   taskHandle.setGuEndorTextDtoTempList(taskHandle.res.guEndorTextDtoTempList)
+  // }
+}
+taskHandle.setGuEndorTextDtoTempList = (obj) => {
+  if (obj) {
+    let endorInfo = []
+    for (let endorText of obj) {
+      let riskCode = endorText.endorTextGuDto.riskCode
+      let endorseTextHead = endorText.endorTextGuDto.endorseTextHead
+      endorInfo.push()
+    }
+  }
+}
+taskHandle.getBasicInfo = () => {
+
 }
 // 基本信息
 taskHandle.setBasicInfo = (obj) => {
@@ -432,6 +455,7 @@ taskHandle.page = {
     TCIArr: [],
     VCIArr: []
   },
-  showNoAutoCheckInfo: []
+  showNoAutoCheckInfo: [],
+  endorInfo: {}
 }
 export default taskHandle

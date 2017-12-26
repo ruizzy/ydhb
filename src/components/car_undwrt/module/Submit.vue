@@ -70,14 +70,13 @@
       this.$store.commit('UPDATE_NAVIGATION_TITLE', {
         navigationTitle: this.isJunior ? '下发修改' : '提交上级'
       })
-      for(let gwSwfNode of this.juniorReq.gwSwfNodeDtoList){
-        this.resultList.push(
-          {
-            nodeNum: gwSwfNode.nodeNo,
-            nodeName: gwSwfNode.nodeCName
-          }
-        )
+      let list = []
+      if(this.isJunior){
+        list = this.juniorReq.gwSwfNodeDtoList
+      }else{
+        list = this.superiorReq.gwSwfNodeDtoList
       }
+      this.initNode(list)
     },
     methods: {
       // 下发修改提交操作
@@ -88,7 +87,7 @@
             easyScanFlag: 'no',
             nodeNo: this.selectedNode,
             nextStepType: this.juniorReq.gwWfLogDto.flag,
-            reasonType: this.reasonType
+            reasonType: this.reasonType 
           }
           let _this = this
           this.$vux.confirm.show({
@@ -137,6 +136,16 @@
               })
             }
           })
+        },
+        initNode(list){
+          for(let gwSwfNode of list){
+            this.resultList.push(
+              {
+                nodeNum: gwSwfNode.nodeNo,
+                nodeName: gwSwfNode.nodeCName
+              }
+            )
+          }
         }
     },
   }
