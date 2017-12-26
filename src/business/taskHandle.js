@@ -106,10 +106,10 @@ taskHandle.setBasicInfo = (obj) => {
         value: obj.guItemMotorDto.frameNo
       }, {
         label: '车辆用途',
-        value: obj.guItemMotorDto.carUseType //ggcode
+        value: obj.guItemMotorDto.carUseType // ggcode
       }, {
         label: '机动车种类',
-        value: obj.guItemMotorDto.carKindCode //ggcode
+        value: obj.guItemMotorDto.carKindCode // ggcode
       }, {
         label: '载客数',
         value: obj.guItemMotorDto.seatCount + '人'
@@ -166,10 +166,13 @@ taskHandle.setTCIInfo = (obj) => {
     switch (obj.guRiskDto0801.carRenewTurnFlag) {
       case '2':
         carRenewTurnFlag = '续保'
+        break
       case '3':
         carRenewTurnFlag = '转保'
+        break
       default:
         carRenewTurnFlag = '新保'
+        break
     }
     taskHandle.page.TCIInfo = [
       {
@@ -321,75 +324,79 @@ taskHandle.setSellInfo = (obj) => {
         label: '子协议',
         value: obj.guMainDto.solutionCode
       }, {
-                label: '归属机构',
-                value: obj.guMainDto.companyCode
-            },{
-                label: '中介名称',
-                value: obj.guMainDto.intermediaryCode
-            },{
-                label: '渠道类型',
-                value: obj.guMainDto.channelDetailCode
-            },{
-                label: '合作网点',
-                value: obj.guMainDto.cooperateSiteCode
-            },{
-                label: '业务员',
-                value: obj.guMainDto.salesmanCode
-            },{
-                label: '操作员',
-                value: obj.guMainDto.operatorCode
-            },
-        ]
-        if(taskHandle.res.guCommissionDtoList){
-            for(let guCommission of taskHandle.res.guCommissionDtoList){
-                if(guCommission.riskCode === '0801'){
-                    taskHandle.page.sellInfo.TCIArr = [{
-                        expenseItem: '手续费',
-                        defaultValue: guCommission.commissionGrossPercent,
-                        adjustedValue: guCommission.commissionPercent
-                    }]
-                }else{
-                    taskHandle.page.sellInfo.VCIArr = [{
-                        expenseItem: '手续费',
-                        defaultValue: guCommission.commissionGrossPercent,
-                        adjustedValue: guCommission.commissionPercent
-                    }]
-                }
-            }
+        label: '归属机构',
+        value: obj.guMainDto.companyCode
+      }, {
+        label: '中介名称',
+        value: obj.guMainDto.intermediaryCode
+      }, {
+        label: '渠道类型',
+        value: obj.guMainDto.channelDetailCode
+      }, {
+        label: '合作网点',
+        value: obj.guMainDto.cooperateSiteCode
+      }, {
+        label: '业务员',
+        value: obj.guMainDto.salesmanCode
+      }, {
+        label: '操作员',
+        value: obj.guMainDto.operatorCode
+      }]
+    if (taskHandle.res.guCommissionDtoList) {
+      for (let guCommission of taskHandle.res.guCommissionDtoList) {
+        if (guCommission.riskCode === '0801') {
+          taskHandle.page.sellInfo.TCIArr = [{
+            expenseItem: '手续费',
+            defaultValue: guCommission.commissionGrossPercent,
+            adjustedValue: guCommission.commissionPercent
+          }]
+        } else {
+          taskHandle.page.sellInfo.VCIArr = [{
+            expenseItem: '手续费',
+            defaultValue: guCommission.commissionGrossPercent,
+            adjustedValue: guCommission.commissionPercent
+          }]
         }
-        if(taskHandle.res.guSalesFeeDtoList){
-            for(let guSalesFee of taskHandle.res.guSalesFeeDtoList){
-                let orgFeePercent
-                switch (guSalesFee.feeType) {
-                    case '318':
-                        orgFeePercent = '客户关怀'
-                    case '313':
-                        orgFeePercent = '绩效提奖'
-                    case '313':
-                        orgFeePercent = '渠道维护'
-                    default:
-                        orgFeePercent = false
-                }
-                if(orgFeePercent && guSalesFee.riskCode === '0801'){
-                    taskHandle.page.sellInfo.TCIArr.push(
-                        {
-                            expenseItem: orgFeePercent,
-                            defaultValue: guSalesFee.orgFeePercent,
-                            adjustedValue: guSalesFee.feePercent
-                        }
-                    )
-                }else if(orgFeePercent){
-                    taskHandle.page.sellInfo.VCIArr.push(
-                        {
-                            expenseItem: orgFeePercent,
-                            defaultValue: guSalesFee.orgFeePercent,
-                            adjustedValue: guSalesFee.feePercent
-                        }
-                    )
-                }
-            }
-        }
+      }
     }
+    if (taskHandle.res.guSalesFeeDtoList) {
+      for (let guSalesFee of taskHandle.res.guSalesFeeDtoList) {
+        let orgFeePercent
+        switch (guSalesFee.feeType) {
+          case '318':
+            orgFeePercent = '客户关怀'
+            break
+          case '313':
+            orgFeePercent = '绩效提奖'
+            break
+          case '314':
+            orgFeePercent = '渠道维护'
+            break
+          default:
+            orgFeePercent = false
+            break
+        }
+
+        if (orgFeePercent && guSalesFee.riskCode === '0801') {
+          taskHandle.page.sellInfo.TCIArr.push(
+            {
+              expenseItem: orgFeePercent,
+              defaultValue: guSalesFee.orgFeePercent,
+              adjustedValue: guSalesFee.feePercent
+            }
+            )
+        } else if (orgFeePercent) {
+          taskHandle.page.sellInfo.VCIArr.push(
+            {
+              expenseItem: orgFeePercent,
+              defaultValue: guSalesFee.orgFeePercent,
+              adjustedValue: guSalesFee.feePercent
+            }
+            )
+        }
+      }
+    }
+  }
 }
 taskHandle.getSellInfo = () => {
   return taskHandle.page.sellInfo
@@ -397,7 +404,7 @@ taskHandle.getSellInfo = () => {
 // 人工核保信息
 taskHandle.setNoAutoCheckInfo = (obj) => {
   if (obj) {
-    for(let item of obj) {
+    for (let item of obj) {
       taskHandle.page.showNoAutoCheckInfo.push({
         ruleName: item.ruledId,
         description: item.description,
