@@ -28,6 +28,11 @@
                    v-model="form.gwWfLogDto.riskCode"
                    placeholder="请选择险种">
       </popup-radio>
+      <popup-radio title="业务类型"
+                   :options="page.businessTypes"
+                   v-model="form.gwWfLogDto.businessType"
+                   placeholder="请选择业务类型">
+      </popup-radio>
       <cell-box align-items="flex-start">
         <x-input title="审核级别"
                  placeholder="请输入"
@@ -86,6 +91,7 @@
           gwWfLogDto: {
             businessNo: '',
             riskCode: '',
+            businessType: '',
             minNodeNo: '',
             maxNodeNo: '',
             flowInTime_ForQueryStart: '',

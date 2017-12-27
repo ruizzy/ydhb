@@ -66,41 +66,72 @@ taskHandle.res = {
  * @Param obj 核保处理数据初始化
  */
 taskHandle.initTaskHandle = (obj) => {
-  Object.assign(taskHandle.res, obj)
-  if (taskHandle.res.guItemMotorDto) {
-    taskHandle.setBasicInfo(taskHandle.res)
-  }
-  if (taskHandle.res.guRiskDto0801) {
-    taskHandle.setTCIInfo(taskHandle.res)
-  }
-  if (taskHandle.res.guRiskDto0812) {
-    taskHandle.setVCIInfo(taskHandle.res)
-  }
-  if (taskHandle.res.guRiskSpecialClausesDtoList) {
-    taskHandle.setRiskSpecialClauses(taskHandle.res.guRiskSpecialClausesDtoList)
-  }
-  if (taskHandle.res.guMainDto) {
-    taskHandle.setSellInfo(taskHandle.res)
-  }
-  if (taskHandle.res.showNoAutoCheckInfo) {
-    taskHandle.setNoAutoCheckInfo(taskHandle.res.showNoAutoCheckInfo)
-  }
-  // if (taskHandle.res.guEndorTextDtoTempList) {
-  //   taskHandle.setGuEndorTextDtoTempList(taskHandle.res.guEndorTextDtoTempList)
-  // }
-}
-taskHandle.setGuEndorTextDtoTempList = (obj) => {
-  if (obj) {
-    let endorInfo = []
-    for (let endorText of obj) {
-      let riskCode = endorText.endorTextGuDto.riskCode
-      let endorseTextHead = endorText.endorTextGuDto.endorseTextHead
-      endorInfo.push()
+    Object.assign(taskHandle.res, obj)
+    if(taskHandle.res.guItemMotorDto){
+        taskHandle.setBasicInfo(taskHandle.res)
     }
-  }
+    if(taskHandle.res.guRiskDto0801){
+        taskHandle.setTCIInfo(taskHandle.res)
+    }
+    if(taskHandle.res.guRiskDto0812){
+        taskHandle.setVCIInfo(taskHandle.res)
+    }
+    if(taskHandle.res.guRiskSpecialClausesDtoList){
+        taskHandle.setRiskSpecialClauses(taskHandle.res.guRiskSpecialClausesDtoList)
+    }
+    if(taskHandle.res.guMainDto){
+        taskHandle.setSellInfo(taskHandle.res)
+    }
+    if(taskHandle.res.showNoAutoCheckInfo){
+        taskHandle.setNoAutoCheckInfo(taskHandle.res.showNoAutoCheckInfo)
+    }
+    if(taskHandle.res.guEndorTextDtoTempList){
+        taskHandle.setEndorInfo(taskHandle.res.guEndorTextDtoTempList)
+    }
 }
-taskHandle.getBasicInfo = () => {
-
+//核批信息
+taskHandle.setEndorInfo = (obj) => {
+    if(obj){
+        let endorInfo = []
+        for(let endorText of obj){
+            let riskCode = endorText.endorTextGuDto.riskCode
+            let endorseTextHead = endorText.endorTextGuDto.endorseTextHead
+            let riskCName = riskCode === '0801' ? '交强险' : '商业险'
+            let endorBlock = []
+            for(let block of endorText.blockList){
+                let detailList = []
+                for(let item of block.guEndorTextItemDtoList){
+                    for(let detail of item.guEndorTextDetailDtoList){
+                        detailList.push({
+                            fieldName: detail.fieldName,
+                            oldValue: detail.oldValue,
+                            newValue: detail.newValue,
+                            changeQuantity: detail.changeQuantity
+                        })
+                    }
+                }
+                endorBlock.push({
+                    detail: detailList,
+                    blockName: block.endorTextBlock
+                })
+            }
+            endorInfo.push({
+                endorBlock: endorBlock,
+                riskCode: riskCode,
+                riskCName: riskCName,
+                endorHead: [{
+                    label: '批头',
+                    value: endorseTextHead
+                }]
+            })
+        }
+        if(endorInfo && endorInfo.length > 0){
+            taskHandle.page.endorInfo = endorInfo
+        }
+    }
+}
+taskHandle.getEndorInfo = () => {
+    return taskHandle.page.endorInfo
 }
 // 基本信息
 taskHandle.setBasicInfo = (obj) => {
@@ -456,6 +487,6 @@ taskHandle.page = {
     VCIArr: []
   },
   showNoAutoCheckInfo: [],
-  endorInfo: {}
+  endorInfo: []
 }
 export default taskHandle
