@@ -12,7 +12,10 @@
           <img slot="icon" src="../assets/img/version.png"/>
         </cell>
       </group>
-      <x-button text="退出登录" type="primary" plain class="exit-button">
+      <x-button text="退出登录"
+                type="primary"
+                plain
+                class="exit-button" @click.native="logout()">
       </x-button>
     </div>
   </div>
@@ -40,6 +43,11 @@
       this.$store.commit('UPDATE_SHOW_NAVIGATIONBAR', {
         showNavigationBar: false
       })
+    },
+    methods: {
+      logout () {
+
+      }
     }
   }
 </script>

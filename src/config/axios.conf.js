@@ -20,7 +20,7 @@ axios.interceptors.request.use((config) => {
   // 超时设置
   config.timeout = config.timeout || timeout
   config.url = context + config.url
-  // config.url = 'https://gw-int2.sino-life.com:8443/SL_PEMNG' + config.url
+  config.url = 'https://gw-int2.sino-life.com:8443' + config.url
   if (!token) {
     let user = sessionStorage.getItem('user')
     if (user) {
